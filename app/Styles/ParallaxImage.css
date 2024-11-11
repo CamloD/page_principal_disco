@@ -1,0 +1,14 @@
+/* styles/ParallaxImage.module.css */
+.parallax {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Ajusta la altura según sea necesario */
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8); /* Ajusta según tu diseño */
+  z-index: 1;
+}

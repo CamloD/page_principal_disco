@@ -1,0 +1,55 @@
+/* Styles/ParallaxVideo.css */
+.videoWrapper1 {
+  position: fixed; /* Fija el contenedor del video a la ventana del navegador */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Cubre toda la ventana en horizontal */
+  height: 100vh; /* Cubre toda la ventana en vertical */
+  overflow: hidden; /* Evita que el contenido se desborde del contenedor */
+  z-index: -1; /* Envía el video al fondo detrás del contenido */
+}
+
+.backgroundVideo1 {
+  position: absolute; /* Posiciona el video dentro del contenedor */
+  top: 50%;
+  left: 50%;
+  width: 1200px; /* Ancho específico en píxeles */
+  height: auto; /* Ajusta la altura automáticamente para mantener la proporción del video */
+  object-fit: cover; /* Mantiene la proporción del video y cubre el contenedor */
+  transform: translate(-50%, -50%); /* Centra el video dentro del contenedor */
+  transition: transform 0.1s ease-out; /* Agrega una transición suave para el movimiento */
+}
+
+.offsetInfo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px;
+  border-radius: 3px;
+  z-index: 1; /* Asegura que la información esté sobre el video */
+}
+.video-container1 {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.video-background1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.video-background1 video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
