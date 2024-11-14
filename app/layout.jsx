@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import './globals.css';
+import Header from 'app/components/Header'
 
 import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from 'next-themes'
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
       <body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
+            <Header/>
             {children}
           </LanguageProvider>
         </ThemeProvider>

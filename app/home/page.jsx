@@ -22,7 +22,7 @@ const SearchForm = () => {
 
   return (
     <div className="relative">
-      <div className="flex flex-col md:flex-row gap-2 p-2 bg-background dark:bg-gray-800 rounded-full shadow-lg">
+      <div className="flex flex-col md:flex-row gap-2 p-2 bg-background dark:bg-gray-800 rounded-full shadow-lg ">
         <div className="flex-1 min-w-[200px]">
           <Label htmlFor="location" className="sr-only">{t('location')}</Label>
           <div className="relative">
@@ -123,102 +123,24 @@ export default function HomePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
   const [registerOpen, setRegisterOpen] = useState(false)
+  
+
 
   useEffect(() => {
     setData(datas);
   }, [])
 
-  const toggleLanguage = () => {
-    setLanguage(language === 'es' ? 'en' : 'es')
-  }
+  
 
   return (
     <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-between items-center mb-12">
-          <Link href="/home">
-            <h1 className="text-3xl md:text-4xl font-bold text-center">Reservas</h1>
-          </Link>
-          <nav className="hidden md:flex items-center space-x-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} 
-              className="rounded-full"
-            >
-              {theme === 'dark' ? (
-                <>
-                  <SunIcon className="h-5 w-5" />
-                </>
-              ) : (
-                <>
-                  <MoonIcon className="h-5 w-5" />
-                </>
-              )}
-            </Button>
-            <Button variant="ghost" size="icon" onClick={toggleLanguage} className="rounded-full">
-              <GlobeIcon className="h-5 w-5" />
-              <span className="sr-only">{t('changeLanguage')}</span>
-            </Button>
-            <Link href="/login" rel="noopener noreferrer">
-              <Button variant="ghost" className="rounded-full">{t('login')}</Button>
-            </Link>
-            <Link href="/register" rel="noopener noreferrer">
-              <Button variant="primary" className="rounded-full">{t('register')}</Button>
-            </Link>
-
-          </nav>
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <MenuIcon className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right">
-              <SheetHeader>
-                <SheetTitle>Menu</SheetTitle>
-              </SheetHeader>
-              <nav className="flex flex-col space-y-4 mt-4">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => setTheme(theme === 'light' ? 'light' : 'dark')} 
-                  className="rounded-full w-full justify-start"
-                >
-                  {theme === 'dark' ? (
-                    <>
-                      <SunIcon className="h-5 w-5 mr-2" />
-                      {t('lightMode')}
-                    </>
-                  ) : (
-                    <>
-                      <MoonIcon className="h-5 w-5 mr-2" />
-                      {t('darkMode')}
-                    </>
-                  )}
-                </Button>
-                <Button variant="ghost" onClick={toggleLanguage} className="rounded-full w-full justify-start">
-                  <GlobeIcon className="h-5 w-5 mr-2" />
-                  {t('changeLanguage')}
-                </Button>
-                <Link href="/login" rel="noopener noreferrer">
-                  <Button variant="ghost" className="rounded-full">{t('login')}</Button>
-                </Link>
-                <Link href="/register" rel="noopener noreferrer">
-                  <Button variant="primary" className="rounded-full">{t('register')}</Button>
-                </Link>
-
-              </nav>
-            </SheetContent>
-          </Sheet>
-        </header>
+      <div className="container mx-auto px-4 py-40 ">
 
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">{t('findYourNextAdventure')}</h2>
           <SearchForm />
         </div>
-
-
+        
         <Tabs defaultValue="todo" className="space-y-8">
           <TabsList className="flex flex-auto justify-between overflow-x-auto bg-inherit scroll overflow-hidden px-4 mb-12 pb-4 items-center transition-all duration-300 ease-in-out py-8">
             {data.categories.map((category, index) => (
