@@ -19,7 +19,7 @@ const fontBody = Inter({
 });
 
 export const metadata = {
-  title: "Page",
+  title: "Reserve page",
   description: "Una plataforma para escuchar disco.",
 };
 
