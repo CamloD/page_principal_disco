@@ -77,13 +77,13 @@ const Header = () => {
   return (
     
     <header className="shadow-md fixed top-0 left-0 w-full bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300 z-50">
-      <div className=" container mx-auto px-1 pt-5 pb-0">
-        <div className="flex justify-between items-center pb-7 pt-4">
+      <div className=" container mx-auto px-1 pt-5 pb-2">
+        <div className="flex justify-between items-center pb-5 pt-2">
           <Link href="/home">
-            <h1 className="text-3xl md:text-4xl font-bold text-center">Reservas</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-center pt-2">Reservas</h1>
           </Link>
           <nav className="hidden md:flex items-center space-x-4">
-            <div className="flex fixed right-0 p-4 ">
+            <div className="flex right-0 pt-2">
               <div className="items-center space-x-4 flex">
                 <Button 
                   variant="outline" 
