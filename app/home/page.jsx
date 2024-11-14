@@ -146,7 +146,7 @@ export default function HomePage() {
               onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} 
               className="rounded-full"
             >
-              {theme === 'light' ? (
+              {theme === 'dark' ? (
                 <>
                   <SunIcon className="h-5 w-5" />
                 </>
@@ -185,7 +185,7 @@ export default function HomePage() {
                   onClick={() => setTheme(theme === 'light' ? 'light' : 'dark')} 
                   className="rounded-full w-full justify-start"
                 >
-                  {theme === 'light' ? (
+                  {theme === 'dark' ? (
                     <>
                       <SunIcon className="h-5 w-5 mr-2" />
                       {t('lightMode')}
