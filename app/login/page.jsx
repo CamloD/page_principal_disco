@@ -11,14 +11,60 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
 
 export default function LoginPage() {
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const { language, setLanguage, t } = useLanguage()
   const { theme, setTheme } = useTheme()
+  const [showPassword, setShowPassword] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('Inicio de sesión con:', { email, password })
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      alert(t('invalidEmail'))
+      return
+    }
+
+    if (formData.password.length < 6) {
+      alert(t('passwordTooShort'))
+      return
+    }
+    
+    setIsSubmitting(true)
+    
+    const { email, password } = formData;
+
+
+    // console.log('Inicio de sesión con:', { email, password }) //  --> envío datos
+
+
+    
+
+    setTimeout(() => {
+      console.log('Registro con:', formData)
+      setIsSubmitting(false)
+      setFormData({
+        email: '',
+        password: ''
+      })
+    }, 1500)
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
   const toggleLanguage = () => {
@@ -26,8 +72,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div >
-      <Card className="w-full max-w-md bg-card dark:bg-gray-800 shadow-lg">
+    <div className="mx-auto p-4 flex justify-center items-center min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
+      <Card className="w-full max-w-md bg-card/50 backdrop-blur-sm border-primary/10 shadow-lg">
         <CardHeader className="flex justify-between items-center">
           <CardTitle className="text-2xl font-bold">{t('login')}</CardTitle>
           <div className="flex space-x-2">
@@ -47,32 +93,49 @@ export default function LoginPage() {
               <Label htmlFor="email">{t('email')}</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="tu@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleInputChange}
                 required
-                className="rounded-full bg-background dark:bg-gray-700 border-2 border-primary/20 focus:border-primary"
+                className="rounded-full bg-background/50 backdrop-blur-sm border-2 border-primary/20 focus:border-primary pr-20"
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">{t('password')}</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="rounded-full bg-background dark:bg-gray-700 border-2 border-primary/20 focus:border-primary"
-              />
+              <div className="relative">  
+                <Input
+                  id="password"
+                  name="password"
+                  placeholder="password" 
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="rounded-full bg-background/50 backdrop-blur-sm border-2 border-primary/20 focus:border-primary pr-20"
+                />
+                <Button
+                    type="button"
+                    variant="ghost"
+                    className="absolute right-0 top-0 h-full px-3 rounded-r-full"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? t('hide') : t('show')}
+                  </Button>
+              </div>
             </div>
-            <Button type="submit" className="w-full rounded-full">{t('login')}</Button>
+            <Button type="submit" className="w-full rounded-full" disabled={isSubmitting}>
+              {isSubmitting ? t('loading') : t('register')}
+            </Button>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             {t('noAccount')}{' '}
-            <Link href="/register" className="text-primary hover:underline">
+          </p>
+          <p className="text-sm mx-2">
+            <Link href="/register" className="hover:underline">
               {t('register')}
             </Link>
           </p>

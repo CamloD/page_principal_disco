@@ -2,9 +2,7 @@
   "categories": [
     { "name": "Todo", "icon": "Globe" },
     { "name": "Hoteles", "icon": "Home" },
-    { "name": "Playas", "icon": "Umbrella" },
     { "name": "Discotecas", "icon": "Music" },
-    { "name": "Vuelos", "icon": "Plane" },
     { "name": "Restaurantes", "icon": "Utensils" },
     { "name": "Eventos", "icon": "Calendar" },
     { "name": "Servicios", "icon": "Briefcase" }
@@ -65,24 +63,6 @@
       "price": 50
     },
     {
-      "id": 7,
-      "title": "Playa Paraíso",
-      "description": "Arena blanca y aguas cristalinas",
-      "image": "https://picsum.photos/800/600?random=7",
-      "category": "playas",
-      "date": "2023-08-15",
-      "price": 0
-    },
-    {
-      "id": 8,
-      "title": "Vuelo Económico",
-      "description": "Viaja cómodamente a tu destino",
-      "image": "https://picsum.photos/800/600?random=8",
-      "category": "vuelos",
-      "date": "2023-08-20",
-      "price": 120
-    },
-    {
       "id": 9,
       "title": "Hotel Boutique",
       "description": "Alojamiento único y personalizado",
@@ -108,15 +88,6 @@
       "category": "eventos",
       "date": "2023-09-05",
       "price": 75
-    },
-    {
-      "id": 12,
-      "title": "Centro Comercial Mega",
-      "description": "Las mejores tiendas en un solo lugar",
-      "image": "https://picsum.photos/800/600?random=12",
-      "category": "compras",
-      "date": "2023-09-10",
-      "price": 0
     },
     {
       "id": 13,
@@ -164,24 +135,6 @@
       "price": 70
     },
     {
-      "id": 18,
-      "title": "Playa Sunset Bay",
-      "description": "Un paraíso tranquilo para relajarte",
-      "image": "https://picsum.photos/800/600?random=18",
-      "category": "playas",
-      "date": "2023-10-01",
-      "price": 0
-    },
-    {
-      "id": 19,
-      "title": "Vuelo Primera Clase",
-      "description": "Viaje en lujo y comodidad",
-      "image": "https://picsum.photos/800/600?random=19",
-      "category": "vuelos",
-      "date": "2023-10-05",
-      "price": 500
-    },
-    {
       "id": 20,
       "title": "Concierto de Jazz",
       "description": "Una noche llena de música suave y elegante",
@@ -189,15 +142,6 @@
       "category": "eventos",
       "date": "2023-10-10",
       "price": 60
-    },
-    {
-      "id": 21,
-      "title": "Centro Comercial Luna",
-      "description": "Un centro comercial con todas las marcas",
-      "image": "https://picsum.photos/800/600?random=21",
-      "category": "compras",
-      "date": "2023-10-15",
-      "price": 0
     },
     {
       "id": 22,

@@ -45,9 +45,19 @@ export default function RegisterPage() {
 
     setIsSubmitting(true)
 
+
+    const { name, email, password } = formData;
+
+    //console.log('Inicio de sesión con:', { name, email, password }) //  --> envío datos
+
     setTimeout(() => {
       console.log('Registro con:', formData)
       setIsSubmitting(false)
+      setFormData({
+        name: '',
+        email: '',
+        password: ''
+      })
     }, 1500)
   }
 
@@ -56,7 +66,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div>
+    <div className="mx-auto p-4 flex justify-center items-center min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
       <Card className="w-full max-w-md bg-card/50 backdrop-blur-sm border-primary/10 shadow-lg">
         <CardHeader className="flex justify-between items-center">
           <CardTitle className="text-2xl font-bold">{t('register')}</CardTitle>
@@ -78,7 +88,7 @@ export default function RegisterPage() {
               <Input
                 id="name"
                 name="name"
-                placeholder="John Doe"
+                placeholder={t('name')}
                 value={formData.name}
                 onChange={handleInputChange}
                 required
@@ -91,7 +101,7 @@ export default function RegisterPage() {
                 id="email"
                 name="email"
                 type="email"
-                placeholder="tu@email.com"
+                placeholder="your@email.com"
                 value={formData.email}
                 onChange={handleInputChange}
                 required
@@ -104,6 +114,7 @@ export default function RegisterPage() {
                 <Input
                   id="password"
                   name="password"
+                  placeholder="password" 
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleInputChange}
@@ -128,7 +139,9 @@ export default function RegisterPage() {
         <CardFooter className="flex justify-center">
           <p className="text-sm text-muted-foreground">
             {t('haveAccount')}{' '}
-            <Link href="/login" className="text-primary hover:underline">
+          </p>
+          <p className="flex text-sm mx-2">
+            <Link href="/login" className="hover:underline">
               {t('login')}
             </Link>
           </p>

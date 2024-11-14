@@ -12,12 +12,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { CalendarIcon, MapPinIcon, UsersIcon, MoonIcon, SunIcon, GlobeIcon, SearchIcon, MenuIcon } from 'lucide-react'
-import * as LucideIcons from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
-import LoginPage from '../login/page'
-import RegisterPage from '../register/page'
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import datas from '../data/data.json'
+
 
 const SearchForm = () => {
   const { t } = useLanguage()
@@ -96,7 +94,7 @@ const ListingCard = ({ listing, t }) => {
           </CardFooter>
         </Card>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[650px] text-foreground dark:text-gray-100">
         <DialogHeader>
           <DialogTitle>{listing.title}</DialogTitle>
         </DialogHeader>
@@ -108,7 +106,7 @@ const ListingCard = ({ listing, t }) => {
             height={600}
             className="w-full h-64 object-cover rounded-lg"
           />
-          <p>{listing.description}</p>
+          <p >{listing.description}</p>
           <p><strong>{t('category')}:</strong> {t(listing.category)}</p>
           <p><strong>{t('date')}:</strong> {listing.date}</p>
           <p><strong>{t('price')}:</strong> ${listing.price}</p>
@@ -127,9 +125,7 @@ export default function HomePage() {
   const [registerOpen, setRegisterOpen] = useState(false)
 
   useEffect(() => {
-    fetch('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/data-KYTFLDLJnFA8EqsVVeCAl5MxrpDAKr.json')
-      .then(response => response.json())
-      .then(jsonData => setData(jsonData))
+    setData(datas);
   }, [])
 
   const toggleLanguage = () => {
@@ -140,17 +136,17 @@ export default function HomePage() {
     <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
       <div className="container mx-auto px-4 py-8">
         <header className="flex justify-between items-center mb-12">
-          <Link href="/">
-            <h1 className="text-3xl md:text-4xl font-bold text-center">TravelEase</h1>
+          <Link href="/home">
+            <h1 className="text-3xl md:text-4xl font-bold text-center">Reservas</h1>
           </Link>
           <nav className="hidden md:flex items-center space-x-4">
             <Button 
               variant="outline" 
               size="sm" 
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} 
               className="rounded-full"
             >
-              {theme === 'dark' ? (
+              {theme === 'light' ? (
                 <>
                   <SunIcon className="h-5 w-5" />
                 </>
@@ -164,32 +160,13 @@ export default function HomePage() {
               <GlobeIcon className="h-5 w-5" />
               <span className="sr-only">{t('changeLanguage')}</span>
             </Button>
-            <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
-              <DialogTrigger asChild>
-                <Button variant="ghost" className="rounded-full">{t('login')}</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <VisuallyHidden>
-                    <DialogTitle>{t('login')}</DialogTitle>
-                  </VisuallyHidden>
-                </DialogHeader>
-                <LoginPage />
-              </DialogContent>
-            </Dialog>
-            <Dialog open={registerOpen} onOpenChange={setRegisterOpen}>
-              <DialogTrigger asChild>
-                <Button variant="primary" className="rounded-full">{t('register')}</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <VisuallyHidden>
-                    <DialogTitle>{t('register')}</DialogTitle>
-                  </VisuallyHidden>
-                </DialogHeader>
-                <RegisterPage />
-              </DialogContent>
-            </Dialog>
+            <Link href="/login" rel="noopener noreferrer">
+              <Button variant="ghost" className="rounded-full">{t('login')}</Button>
+            </Link>
+            <Link href="/register" rel="noopener noreferrer">
+              <Button variant="primary" className="rounded-full">{t('register')}</Button>
+            </Link>
+
           </nav>
           <Sheet>
             <SheetTrigger asChild>
@@ -208,7 +185,7 @@ export default function HomePage() {
                   onClick={() => setTheme(theme === 'light' ? 'light' : 'dark')} 
                   className="rounded-full w-full justify-start"
                 >
-                  {theme === 'dark' ? (
+                  {theme === 'light' ? (
                     <>
                       <SunIcon className="h-5 w-5 mr-2" />
                       {t('lightMode')}
@@ -224,32 +201,13 @@ export default function HomePage() {
                   <GlobeIcon className="h-5 w-5 mr-2" />
                   {t('changeLanguage')}
                 </Button>
-                <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="ghost" className="rounded-full w-full justify-start">{t('login')}</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <VisuallyHidden>
-                        <DialogTitle>{t('login')}</DialogTitle>
-                      </VisuallyHidden>
-                    </DialogHeader>
-                    <LoginPage />
-                  </DialogContent>
-                </Dialog>
-                <Dialog open={registerOpen} onOpenChange={setRegisterOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="primary" className="rounded-full w-full justify-start">{t('register')}</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <VisuallyHidden>
-                        <DialogTitle>{t('register')}</DialogTitle>
-                      </VisuallyHidden>
-                    </DialogHeader>
-                    <RegisterPage />
-                  </DialogContent>
-                </Dialog>
+                <Link href="/login" rel="noopener noreferrer">
+                  <Button variant="ghost" className="rounded-full">{t('login')}</Button>
+                </Link>
+                <Link href="/register" rel="noopener noreferrer">
+                  <Button variant="primary" className="rounded-full">{t('register')}</Button>
+                </Link>
+
               </nav>
             </SheetContent>
           </Sheet>
@@ -260,26 +218,20 @@ export default function HomePage() {
           <SearchForm />
         </div>
 
-        <div className="flex justify-between items-center overflow-x-auto mb-12 pb-4">
-          {data.categories.map((category, index) => {
-            const IconComponent = LucideIcons[category.icon] || LucideIcons.Globe
-            return (
-              <Button key={index} variant="ghost" className="flex flex-col items-center rounded-full px-4 py-2 transition-all hover:bg-primary/10">
-                <IconComponent className="w-6 h-6 md:w-8 md:h-8 text-primary mb-2" />
-                <span className="text-xs md:text-sm font-medium">{t(category.name.toLowerCase())}</span>
-              </Button>
-            )
-          })}
-        </div>
 
         <Tabs defaultValue="todo" className="space-y-8">
-          <TabsList className="flex justify-start overflow-x-auto">
+          <TabsList className="flex flex-auto justify-between overflow-x-auto bg-inherit scroll overflow-hidden px-4 mb-12 pb-4 items-center transition-all duration-300 ease-in-out py-8">
             {data.categories.map((category, index) => (
-              <TabsTrigger key={index} value={category.name.toLowerCase()} className="px-4 md:px-6 py-2 md:py-3 rounded-full text-sm md:text-base">
+              <TabsTrigger
+                key={index}
+                value={category.name.toLowerCase()}
+                className="px-4 md:px-6 py-6 md:py-3 rounded-full text-sm md:text-base transition-colors duration-300 ease-in-out hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 active:ring-4"
+              >
                 {t(category.name.toLowerCase())}
               </TabsTrigger>
             ))}
           </TabsList>
+
           {data.categories.map((category, index) => {
             const filteredListings = data.listings.filter(listing =>
               category.name.toLowerCase() === 'todo' || listing.category === category.name.toLowerCase()
