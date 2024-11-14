@@ -205,7 +205,7 @@ export default function HomePage() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+                  onClick={() => setTheme(theme === 'light' ? 'light' : 'dark')} 
                   className="rounded-full w-full justify-start"
                 >
                   {theme === 'dark' ? (
