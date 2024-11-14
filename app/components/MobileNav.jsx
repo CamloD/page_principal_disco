@@ -10,11 +10,19 @@ const links = [
   {
     name: "home",
     path: "/home",
-  },
-  {
+},
+{
     name: "gallery",
     path: "/gallery",
-  },
+}, 
+{
+    name: "contact",
+    path: "/contact",
+},   
+{
+    name: "información",
+    path: "/information",
+}, 
 
 ];
 
@@ -62,8 +70,7 @@ const MobileNav = () => {
           </Button>
           <div className="mt-9 mb-5 text-center text-2xl grid gap-6 p-6">
             <Link href="/home" prefetch={false} className="flex items-center justify-center space-x-2">
-              <Music2Icon className="h-6 w-6" />
-              <h1 className="text-2xl font-bold uppercase">Discoteca</h1>
+              <h1 className="text-2xl font-bold uppercase">Neon Nights Disco</h1>
             </Link>
           </div>
           <nav className="flex flex-col justify-center items-center gap-4 p-4">

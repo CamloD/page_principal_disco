@@ -2,10 +2,9 @@ import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import './globals.css';
 
-// Componentes
-import Header from "@/app/components/Header";
+import { LanguageProvider } from './contexts/LanguageContext';
+import { ThemeProvider } from 'next-themes'
 
-// Fuentes
 const fontHeading = Inter({
   subsets: ['latin'],
   display: 'swap',
@@ -26,10 +25,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
-        <Header />
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <LanguageProvider>
+            {children}
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

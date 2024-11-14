@@ -1,226 +1,302 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Card, CardContent } from "@/components/ui/card"
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  ExternalLink, 
-  Plus, 
-  X, 
-  Facebook, 
-  Twitter, 
-  Instagram, 
-  Phone,
-  ChevronDown
-} from 'lucide-react'
-import Image from "next/image"
-import Link from "next/link"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { CalendarIcon, MapPinIcon, UsersIcon, MoonIcon, SunIcon, GlobeIcon, SearchIcon, MenuIcon } from 'lucide-react'
+import * as LucideIcons from 'lucide-react'
+import { useLanguage } from '../contexts/LanguageContext'
+import { useTheme } from 'next-themes'
+import LoginPage from '../login/page'
+import RegisterPage from '../register/page'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 
-const initialPages = [
-  {
-    title: "Home",
-    logo: "/placeholder.svg?height=80&width=80",
-    url: "https://camlod.github.io/page-disco/home"
-  },
-  {
-    title: "YouTube",
-    logo: "/placeholder.svg?height=80&width=80",
-    url: "https://www.youtube.com/"
-  },
-  {
-    title: "Gallery",
-    logo: "/placeholder.svg?height=80&width=80",
-    url: "https://camlod.github.io/page-disco/gallery"
-  },
-  {
-    title: "Events",
-    logo: "/placeholder.svg?height=80&width=80",
-    url: "/events"
-  },
-  {
-    title: "VIP",
-    logo: "/placeholder.svg?height=80&width=80",
-    url: "/vip"
-  }
-]
+const SearchForm = () => {
+  const { t } = useLanguage()
 
-export default function Component() {
-  const [pages, setPages] = useState(initialPages)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [showIframe, setShowIframe] = useState(false)
-  const [newPageTitle, setNewPageTitle] = useState('')
-  const [newPageUrl, setNewPageUrl] = useState('')
+  return (
+    <div className="relative">
+      <div className="flex flex-col md:flex-row gap-2 p-2 bg-background dark:bg-gray-800 rounded-full shadow-lg">
+        <div className="flex-1 min-w-[200px]">
+          <Label htmlFor="location" className="sr-only">{t('location')}</Label>
+          <div className="relative">
+            <MapPinIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input id="location" placeholder={t('whereTo')} className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary" />
+          </div>
+        </div>
+        <div className="flex-1 min-w-[200px]">
+          <Label htmlFor="dates" className="sr-only">{t('dates')}</Label>
+          <div className="relative">
+            <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input id="dates" placeholder={t('addDates')} className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary" />
+          </div>
+        </div>
+        <div className="flex-1 min-w-[200px]">
+          <Label htmlFor="guests" className="sr-only">{t('guests')}</Label>
+          <div className="relative">
+            <UsersIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Select>
+              <SelectTrigger className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary">
+                <SelectValue placeholder={t('addGuests')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1 {t('guest')}</SelectItem>
+                <SelectItem value="2">2 {t('guests')}</SelectItem>
+                <SelectItem value="3">3 {t('guests')}</SelectItem>
+                <SelectItem value="4">4+ {t('guests')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+      <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full w-12 h-12 bg-primary text-primary-foreground hover:bg-primary/90">
+        <SearchIcon className="h-5 w-5" />
+        <span className="sr-only">{t('search')}</span>
+      </Button>
+    </div>
+  )
+}
 
-  const nextPage = () => setCurrentPage((prev) => (prev + 1) % pages.length)
-  const prevPage = () => setCurrentPage((prev) => (prev - 1 + pages.length) % pages.length)
+const ListingCard = ({ listing, t }) => {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Card className="overflow-hidden transition-all hover:shadow-lg hover:scale-105 bg-card dark:bg-gray-800 cursor-pointer">
+          <div className="relative">
+            <Image
+              src={listing.image}
+              alt={listing.title}
+              width={800}
+              height={600}
+              className="w-full h-64 object-cover"
+            />
+            <div className="absolute top-4 right-4 bg-background dark:bg-gray-800 rounded-full px-3 py-1 text-sm font-semibold">
+              ${listing.price}
+            </div>
+          </div>
+          <CardHeader>
+            <CardTitle className="text-xl">{listing.title}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground mb-2">{listing.description}</p>
+            <p className="text-sm font-medium">{listing.date}</p>
+          </CardContent>
+          <CardFooter>
+            <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
+              {t('viewDetails')}
+            </Button>
+          </CardFooter>
+        </Card>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{listing.title}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <Image
+            src={listing.image}
+            alt={listing.title}
+            width={800}
+            height={600}
+            className="w-full h-64 object-cover rounded-lg"
+          />
+          <p>{listing.description}</p>
+          <p><strong>{t('category')}:</strong> {t(listing.category)}</p>
+          <p><strong>{t('date')}:</strong> {listing.date}</p>
+          <p><strong>{t('price')}:</strong> ${listing.price}</p>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
 
-  const toggleIframe = () => setShowIframe(!showIframe)
+export default function HomePage() {
+  const { language, setLanguage, t } = useLanguage()
+  const [data, setData] = useState({ categories: [], listings: [] })
+  const { theme, setTheme } = useTheme()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [registerOpen, setRegisterOpen] = useState(false)
 
-  const addNewPage = () => {
-    if (newPageTitle && newPageUrl) {
-      setPages([...pages, {
-        title: newPageTitle,
-        logo: "/placeholder.svg?height=80&width=80",
-        url: newPageUrl
-      }])
-      setNewPageTitle('')
-      setNewPageUrl('')
-    }
+  useEffect(() => {
+    fetch('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/data-KYTFLDLJnFA8EqsVVeCAl5MxrpDAKr.json')
+      .then(response => response.json())
+      .then(jsonData => setData(jsonData))
+  }, [])
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'es' ? 'en' : 'es')
   }
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen flex flex-col">
-
-
-      <main className="flex-grow container mx-auto py-8 px-4 max-w-full">
-        <h1 className="text-5xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">
-          Explora Nuestras Páginas
-        </h1>
-        
-        <div className="mb-8 overflow-x-auto">
-          <div className="flex space-x-4 pb-4">
-            {pages.map((page, index) => (
-              <Button
-                key={index}
-                variant="ghost"
-                className={`flex flex-col items-center transition-all duration-300 transform hover:scale-105 ${
-                  currentPage === index ? 'bg-purple-100 scale-105' : ''
-                }`}
-                onClick={() => setCurrentPage(index)}
-              >
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center mb-2 overflow-hidden shadow-lg">
-                  <Image
-                    src={page.logo}
-                    alt={`${page.title} logo`}
-                    width={70}
-                    height={70}
-                    className="rounded-full"
-                  />
-                </div>
-                <span className="text-sm font-medium">{page.title}</span>
-              </Button>
-            ))}
-            <Dialog>
+    <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
+      <div className="container mx-auto px-4 py-8">
+        <header className="flex justify-between items-center mb-12">
+          <Link href="/">
+            <h1 className="text-3xl md:text-4xl font-bold text-center">TravelEase</h1>
+          </Link>
+          <nav className="hidden md:flex items-center space-x-4">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+              className="rounded-full"
+            >
+              {theme === 'dark' ? (
+                <>
+                  <SunIcon className="h-5 w-5" />
+                </>
+              ) : (
+                <>
+                  <MoonIcon className="h-5 w-5" />
+                </>
+              )}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={toggleLanguage} className="rounded-full">
+              <GlobeIcon className="h-5 w-5" />
+              <span className="sr-only">{t('changeLanguage')}</span>
+            </Button>
+            <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
               <DialogTrigger asChild>
-                <Button variant="ghost" className="flex flex-col items-center transition-all duration-300 transform hover:scale-105">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-green-400 to-blue-500 flex items-center justify-center mb-2 shadow-lg">
-                    <Plus className="w-10 h-10 text-white" />
-                  </div>
-                  <span className="text-sm font-medium">Add Page</span>
-                </Button>
+                <Button variant="ghost" className="rounded-full">{t('login')}</Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Add New Page</DialogTitle>
+                  <VisuallyHidden>
+                    <DialogTitle>{t('login')}</DialogTitle>
+                  </VisuallyHidden>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <Input
-                    placeholder="Page Title"
-                    value={newPageTitle}
-                    onChange={(e) => setNewPageTitle(e.target.value)}
-                  />
-                  <Input
-                    placeholder="Page URL"
-                    value={newPageUrl}
-                    onChange={(e) => setNewPageUrl(e.target.value)}
-                  />
-                  <Button onClick={addNewPage}>Add Page</Button>
-                </div>
+                <LoginPage />
               </DialogContent>
             </Dialog>
-          </div>
-        </div>
-        
-        <Card className="bg-white shadow-xl overflow-hidden">
-          <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-6">
-              <Button variant="outline" size="icon" onClick={prevPage} className="text-gray-600 hover:bg-gray-100 transition-all duration-300">
-                <ChevronLeft className="h-6 w-6" />
+            <Dialog open={registerOpen} onOpenChange={setRegisterOpen}>
+              <DialogTrigger asChild>
+                <Button variant="primary" className="rounded-full">{t('register')}</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <VisuallyHidden>
+                    <DialogTitle>{t('register')}</DialogTitle>
+                  </VisuallyHidden>
+                </DialogHeader>
+                <RegisterPage />
+              </DialogContent>
+            </Dialog>
+          </nav>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <MenuIcon className="h-6 w-6" />
               </Button>
-              <h2 className="text-3xl font-bold text-purple-600">
-                {pages[currentPage].title}
-              </h2>
-              <Button variant="outline" size="icon" onClick={nextPage} className="text-gray-600 hover:bg-gray-100 transition-all duration-300">
-                <ChevronRight className="h-6 w-6" />
-              </Button>
-            </div>
-            <div className="flex flex-col md:flex-row items-center mb-8 space-y-4 md:space-y-0 md:space-x-8">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center overflow-hidden shadow-xl">
-                <Image
-                  src={pages[currentPage].logo}
-                  alt={`${pages[currentPage].title} logo`}
-                  width={120}
-                  height={120}
-                  className="rounded-full"
-                />
-              </div>
-              <div className="flex flex-col items-center md:items-start">
-                <h3 className="text-2xl font-semibold text-purple-700 mb-4">{pages[currentPage].title}</h3>
-                <div className="flex space-x-4">
-                  <Button asChild variant="outline" className="text-purple-600 border-purple-300 hover:bg-purple-50 transition-all duration-300">
-                    <Link href={pages[currentPage].url} target="_blank" rel="noopener noreferrer">
-                      Visit Page <ExternalLink className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                  <Button onClick={toggleIframe} className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 transition-all duration-300">
-                    {showIframe ? 'Hide' : 'Show'} Preview
-                  </Button>
-                </div>
-              </div>
-            </div>
-            {showIframe && (
-              <div className="mt-6 rounded-lg overflow-hidden border-2 border-purple-300 shadow-2xl relative w-full">
-                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-2 flex justify-between items-center">
-                  <span className="font-semibold">{pages[currentPage].title} Preview</span>
-                  <Button variant="ghost" size="sm" onClick={toggleIframe} className="text-white hover:bg-white/20">
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-                <iframe
-                  src={pages[currentPage].url}
-                  className="w-full h-[80vh] mt-10"
-                  title={`Preview of ${pages[currentPage].title}`}
-                />
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </main>
+            </SheetTrigger>
+            <SheetContent side="right">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col space-y-4 mt-4">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} 
+                  className="rounded-full w-full justify-start"
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <SunIcon className="h-5 w-5 mr-2" />
+                      {t('lightMode')}
+                    </>
+                  ) : (
+                    <>
+                      <MoonIcon className="h-5 w-5 mr-2" />
+                      {t('darkMode')}
+                    </>
+                  )}
+                </Button>
+                <Button variant="ghost" onClick={toggleLanguage} className="rounded-full w-full justify-start">
+                  <GlobeIcon className="h-5 w-5 mr-2" />
+                  {t('changeLanguage')}
+                </Button>
+                <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="ghost" className="rounded-full w-full justify-start">{t('login')}</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <VisuallyHidden>
+                        <DialogTitle>{t('login')}</DialogTitle>
+                      </VisuallyHidden>
+                    </DialogHeader>
+                    <LoginPage />
+                  </DialogContent>
+                </Dialog>
+                <Dialog open={registerOpen} onOpenChange={setRegisterOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="primary" className="rounded-full w-full justify-start">{t('register')}</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <VisuallyHidden>
+                        <DialogTitle>{t('register')}</DialogTitle>
+                      </VisuallyHidden>
+                    </DialogHeader>
+                    <RegisterPage />
+                  </DialogContent>
+                </Dialog>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </header>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <h3 className="text-2xl font-bold mb-2">Neon Nights Disco</h3>
-              <p className="text-gray-400">The ultimate nightlife experience</p>
-            </div>
-            <div className="flex space-x-4">
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-                <Facebook className="h-6 w-6" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-                <Twitter className="h-6 w-6" />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-                <Instagram className="h-6 w-6" />
-              </Button>
-            </div>
-          </div>
-          <div className="mt-8 text-center text-gray-400 text-sm">
-            © 2023 Neon Nights Disco. All rights reserved.
-          </div>
+        <div className="mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">{t('findYourNextAdventure')}</h2>
+          <SearchForm />
         </div>
-      </footer>
+
+        <div className="flex justify-between items-center overflow-x-auto mb-12 pb-4">
+          {data.categories.map((category, index) => {
+            const IconComponent = LucideIcons[category.icon] || LucideIcons.Globe
+            return (
+              <Button key={index} variant="ghost" className="flex flex-col items-center rounded-full px-4 py-2 transition-all hover:bg-primary/10">
+                <IconComponent className="w-6 h-6 md:w-8 md:h-8 text-primary mb-2" />
+                <span className="text-xs md:text-sm font-medium">{t(category.name.toLowerCase())}</span>
+              </Button>
+            )
+          })}
+        </div>
+
+        <Tabs defaultValue="todo" className="space-y-8">
+          <TabsList className="flex justify-start overflow-x-auto">
+            {data.categories.map((category, index) => (
+              <TabsTrigger key={index} value={category.name.toLowerCase()} className="px-4 md:px-6 py-2 md:py-3 rounded-full text-sm md:text-base">
+                {t(category.name.toLowerCase())}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {data.categories.map((category, index) => {
+            const filteredListings = data.listings.filter(listing =>
+              category.name.toLowerCase() === 'todo' || listing.category === category.name.toLowerCase()
+            )
+
+            return (
+              <TabsContent key={index} value={category.name.toLowerCase()}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  {filteredListings.map((listing) => (
+                    <ListingCard key={listing.id} listing={listing} t={t} />
+                  ))}
+                </div>
+              </TabsContent>
+            )
+          })}
+        </Tabs>
+      </div>
     </div>
   )
 }

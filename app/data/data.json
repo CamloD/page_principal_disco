@@ -1,0 +1,212 @@
+{
+  "categories": [
+    { "name": "Todo", "icon": "Globe" },
+    { "name": "Hoteles", "icon": "Home" },
+    { "name": "Playas", "icon": "Umbrella" },
+    { "name": "Discotecas", "icon": "Music" },
+    { "name": "Vuelos", "icon": "Plane" },
+    { "name": "Restaurantes", "icon": "Utensils" },
+    { "name": "Eventos", "icon": "Calendar" },
+    { "name": "Servicios", "icon": "Briefcase" }
+  ],
+  "listings": [
+    {
+      "id": 1,
+      "title": "Hotel Estrella",
+      "description": "Lujoso hotel en el centro de la ciudad",
+      "image": "https://picsum.photos/800/600?random=1",
+      "category": "hoteles",
+      "date": "2023-07-15",
+      "price": 150
+    },
+    {
+      "id": 2,
+      "title": "Coche Deportivo",
+      "description": "Vehículo de alta gama para tu viaje",
+      "image": "https://picsum.photos/800/600?random=2",
+      "category": "vehiculos",
+      "date": "2023-07-20",
+      "price": 100
+    },
+    {
+      "id": 3,
+      "title": "Club Nocturno Lunar",
+      "description": "La mejor experiencia nocturna",
+      "image": "https://picsum.photos/800/600?random=3",
+      "category": "discotecas",
+      "date": "2023-07-22",
+      "price": 30
+    },
+    {
+      "id": 4,
+      "title": "Apartamento Vista al Mar",
+      "description": "Relajante estancia frente a la playa",
+      "image": "https://picsum.photos/800/600?random=4",
+      "category": "hoteles",
+      "date": "2023-08-01",
+      "price": 200
+    },
+    {
+      "id": 5,
+      "title": "SUV Familiar",
+      "description": "Perfecto para viajes en familia",
+      "image": "https://picsum.photos/800/600?random=5",
+      "category": "vehiculos",
+      "date": "2023-08-05",
+      "price": 80
+    },
+    {
+      "id": 6,
+      "title": "Restaurante Gourmet",
+      "description": "Experiencia culinaria de alto nivel",
+      "image": "https://picsum.photos/800/600?random=6",
+      "category": "restaurantes",
+      "date": "2023-08-10",
+      "price": 50
+    },
+    {
+      "id": 7,
+      "title": "Playa Paraíso",
+      "description": "Arena blanca y aguas cristalinas",
+      "image": "https://picsum.photos/800/600?random=7",
+      "category": "playas",
+      "date": "2023-08-15",
+      "price": 0
+    },
+    {
+      "id": 8,
+      "title": "Vuelo Económico",
+      "description": "Viaja cómodamente a tu destino",
+      "image": "https://picsum.photos/800/600?random=8",
+      "category": "vuelos",
+      "date": "2023-08-20",
+      "price": 120
+    },
+    {
+      "id": 9,
+      "title": "Hotel Boutique",
+      "description": "Alojamiento único y personalizado",
+      "image": "https://picsum.photos/800/600?random=9",
+      "category": "hoteles",
+      "date": "2023-08-25",
+      "price": 180
+    },
+    {
+      "id": 10,
+      "title": "Coche Eléctrico",
+      "description": "Viaja de forma sostenible",
+      "image": "https://picsum.photos/800/600?random=10",
+      "category": "vehiculos",
+      "date": "2023-09-01",
+      "price": 90
+    },
+    {
+      "id": 11,
+      "title": "Concierto de Rock",
+      "description": "Disfruta de la mejor música en vivo",
+      "image": "https://picsum.photos/800/600?random=11",
+      "category": "eventos",
+      "date": "2023-09-05",
+      "price": 75
+    },
+    {
+      "id": 12,
+      "title": "Centro Comercial Mega",
+      "description": "Las mejores tiendas en un solo lugar",
+      "image": "https://picsum.photos/800/600?random=12",
+      "category": "compras",
+      "date": "2023-09-10",
+      "price": 0
+    },
+    {
+      "id": 13,
+      "title": "Servicio de Limpieza",
+      "description": "Mantén tu hogar impecable",
+      "image": "https://picsum.photos/800/600?random=13",
+      "category": "servicios",
+      "date": "2023-09-15",
+      "price": 40
+    },
+    {
+      "id": 14,
+      "title": "Hotel Playa Dorada",
+      "description": "Hotel con acceso directo a la playa",
+      "image": "https://picsum.photos/800/600?random=14",
+      "category": "hoteles",
+      "date": "2023-09-18",
+      "price": 210
+    },
+    {
+      "id": 15,
+      "title": "Coche de Lujo",
+      "description": "Automóvil de lujo para ocasiones especiales",
+      "image": "https://picsum.photos/800/600?random=15",
+      "category": "vehiculos",
+      "date": "2023-09-22",
+      "price": 250
+    },
+    {
+      "id": 16,
+      "title": "Discoteca Noche de Fuego",
+      "description": "Fiesta sin fin con los mejores DJs",
+      "image": "https://picsum.photos/800/600?random=16",
+      "category": "discotecas",
+      "date": "2023-09-25",
+      "price": 35
+    },
+    {
+      "id": 17,
+      "title": "Restaurante Mar & Tierra",
+      "description": "Los mejores platillos del mar y la tierra",
+      "image": "https://picsum.photos/800/600?random=17",
+      "category": "restaurantes",
+      "date": "2023-09-28",
+      "price": 70
+    },
+    {
+      "id": 18,
+      "title": "Playa Sunset Bay",
+      "description": "Un paraíso tranquilo para relajarte",
+      "image": "https://picsum.photos/800/600?random=18",
+      "category": "playas",
+      "date": "2023-10-01",
+      "price": 0
+    },
+    {
+      "id": 19,
+      "title": "Vuelo Primera Clase",
+      "description": "Viaje en lujo y comodidad",
+      "image": "https://picsum.photos/800/600?random=19",
+      "category": "vuelos",
+      "date": "2023-10-05",
+      "price": 500
+    },
+    {
+      "id": 20,
+      "title": "Concierto de Jazz",
+      "description": "Una noche llena de música suave y elegante",
+      "image": "https://picsum.photos/800/600?random=20",
+      "category": "eventos",
+      "date": "2023-10-10",
+      "price": 60
+    },
+    {
+      "id": 21,
+      "title": "Centro Comercial Luna",
+      "description": "Un centro comercial con todas las marcas",
+      "image": "https://picsum.photos/800/600?random=21",
+      "category": "compras",
+      "date": "2023-10-15",
+      "price": 0
+    },
+    {
+      "id": 22,
+      "title": "Servicio de Transporte Privado",
+      "description": "Transporte exclusivo de puerta a puerta",
+      "image": "https://picsum.photos/800/600?random=22",
+      "category": "servicios",
+      "date": "2023-10-20",
+      "price": 90
+    }
+  ]
+}
