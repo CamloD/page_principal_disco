@@ -156,7 +156,7 @@ const ListingCard = ({ listing, t }) => {
           </CardFooter>
         </Card>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[1170px] text-foreground dark:text-gray-100">
+      <DialogContent className="sm:max-w-[1190px] text-foreground dark:text-gray-100">
         <DialogHeader>
           <DialogTitle>{listing.title}</DialogTitle>
         </DialogHeader>
@@ -166,10 +166,10 @@ const ListingCard = ({ listing, t }) => {
             alt={listing.title}
             width={800}
             height={600}
-            className="w-full h-80 object-cover rounded-lg"
+            className="w-full h-52 object-cover rounded-lg"
           />
           <p>{formattedDescription}</p>
-          <p><strong>{t('category')}:</strong> {t(listing.category)}</p>
+          {/*<p><strong>{t('category')}:</strong> {t(listing.category)}</p>*/}
           <p><strong>{t('date')}:</strong> {listing.date}</p>
           <p><strong>{t('price')}:</strong> ${listing.price}</p>
         </div>
