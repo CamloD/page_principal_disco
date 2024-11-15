@@ -1,9 +1,8 @@
 {
-  "name": "page_disco",
+  "name": "page_reserve",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "homepage": "https://www.disco.com/page-disco/",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

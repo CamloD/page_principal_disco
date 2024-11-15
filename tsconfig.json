@@ -16,25 +16,26 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "baseUrl": ".", // Agrega esta línea
+    "baseUrl": ".", 
     "paths": {
       "@/*": [
         "*"
-      ] // Agrega esta línea
+      ] 
     },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "target": "ES2017"
+    "target": "ESNext"
+    
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/contexts/languaje_page.tsx", "app/contexts/languaje_page.tsx", "app/login/page.jsx"  ],
+, "app/contexts/languaje_page.tsx", "app/contexts/languaje_page.tsx", "app/login/page.jsx", "app/home/components/search.jsx"  ],
   "exclude": [
     "node_modules"
   ]

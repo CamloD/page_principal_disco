@@ -10,7 +10,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { CalendarIcon, MapPinIcon, UsersIcon, MoonIcon, SunIcon, GlobeIcon, SearchIcon, MenuIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
@@ -64,6 +63,22 @@ const SearchForm = () => {
 }
 
 const ListingCard = ({ listing, t }) => {
+  const [formattedDescription, setFormattedDescription] = useState('');
+
+  useEffect(() => {
+    const formatDescription = (description) => {
+      return description.split('\n').map((str, index) => (
+        <span key={index}>
+          {str}
+          {index < description.split('\n').length - 1 && <br />}
+        </span>
+      ));
+    };
+
+    setFormattedDescription(formatDescription(listing.description));
+  }, [listing.description]);
+
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -84,7 +99,7 @@ const ListingCard = ({ listing, t }) => {
             <CardTitle className="text-xl">{listing.title}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground mb-2">{listing.description}</p>
+            <p className="text-sm text-muted-foreground mb-2">{formattedDescription}</p>
             <p className="text-sm font-medium">{listing.date}</p>
           </CardContent>
           <CardFooter>
@@ -94,7 +109,7 @@ const ListingCard = ({ listing, t }) => {
           </CardFooter>
         </Card>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[650px] text-foreground dark:text-gray-100">
+      <DialogContent className="sm:max-w-[1170px] text-foreground dark:text-gray-100">
         <DialogHeader>
           <DialogTitle>{listing.title}</DialogTitle>
         </DialogHeader>
@@ -104,9 +119,9 @@ const ListingCard = ({ listing, t }) => {
             alt={listing.title}
             width={800}
             height={600}
-            className="w-full h-64 object-cover rounded-lg"
+            className="w-full h-80 object-cover rounded-lg"
           />
-          <p >{listing.description}</p>
+          <p>{formattedDescription}</p>
           <p><strong>{t('category')}:</strong> {t(listing.category)}</p>
           <p><strong>{t('date')}:</strong> {listing.date}</p>
           <p><strong>{t('price')}:</strong> ${listing.price}</p>
@@ -134,7 +149,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
-      <div className="container mx-auto px-4 py-40 ">
+      <div className="container mx-auto px-4 py-32 ">
 
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">{t('findYourNextAdventure')}</h2>
@@ -142,7 +157,7 @@ export default function HomePage() {
         </div>
         
         <Tabs defaultValue="todo" className="space-y-8">
-          <TabsList className="flex flex-auto justify-between overflow-x-auto bg-inherit scroll overflow-hidden px-4 mb-12 pb-4 items-center transition-all duration-300 ease-in-out py-8">
+          <TabsList className="flex flex-auto justify-between overflow-x-auto bg-inherit scroll overflow-y-hidden px-4 mb-12 pb-4 items-center transition-all duration-300 ease-in-out py-8 dark:bg-inherit">
             {data.categories.map((category, index) => (
               <TabsTrigger
                 key={index}

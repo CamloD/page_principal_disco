@@ -78,7 +78,7 @@ const Header = () => {
     
     <header className="shadow-md fixed top-0 left-0 w-full bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300 z-50">
       <div className=" container mx-auto px-1 pt-5 pb-2">
-        <div className="flex justify-between items-center pb-5 pt-2">
+        <div className="flex justify-between items-center pb-5 pt-2 ">
           <Link href="/home">
             <h1 className="text-3xl md:text-4xl font-bold text-center pt-2">Reservas</h1>
           </Link>
@@ -86,7 +86,7 @@ const Header = () => {
             <div className="flex right-0 pt-2">
               <div className="items-center space-x-4 flex">
                 <Button 
-                  variant="outline" 
+                  variant="ghost" 
                   size="sm" 
                   onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} 
                   className="rounded-full"
@@ -116,20 +116,20 @@ const Header = () => {
           </nav>
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button variant="ghost" size="icon" className="md:hidden ">
                 <MenuIcon className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">
-              <SheetHeader>
+            <SheetContent side="right" className="text-foreground dark:text-gray-100">
+              <SheetHeader className="text-foreground dark:text-gray-100">
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col space-y-4 mt-4">
+              <nav className="flex flex-col items-center space-y-4 mt-4 text-foreground dark:text-gray-100">
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} 
-                  className="rounded-full w-full justify-start"
+                  className="rounded-full w-full justify-center"
                 >
                   {theme === 'dark' ? (
                     <>
@@ -143,15 +143,16 @@ const Header = () => {
                     </>
                   )}
                 </Button>
-                <Button variant="ghost" onClick={toggleLanguage} className="rounded-full w-full justify-start">
-                  <GlobeIcon className="h-5 w-5 mr-2" />
+                <Button variant="outline" onClick={toggleLanguage} className="rounded-full justify-center">
+                  <GlobeIcon className="h-5 w-20 mr-1" />
                   {t('changeLanguage')}
                 </Button>
                 <Link href="/login" rel="noopener noreferrer">
                   <Button variant="ghost" className="rounded-full">{t('login')}</Button>
                 </Link>
                 <Link href="/register" rel="noopener noreferrer">
-                  <Button variant="primary" className="rounded-full">{t('register')}</Button>
+                  <Button color="cyan"  variant="ghost" className="rounded-full">{t('register')}</Button>
+                  
                 </Link>
 
               </nav>
