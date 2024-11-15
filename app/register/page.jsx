@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { GlobeIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
+import { useAuth } from 'app/Auth/auth'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -20,14 +22,12 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { language, setLanguage, t } = useLanguage()
   const { theme, setTheme } = useTheme()
+  const { register } = useAuth()
+  const router = useRouter()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-  }
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword)
   }
 
   const handleSubmit = (e) => {
@@ -45,20 +45,14 @@ export default function RegisterPage() {
 
     setIsSubmitting(true)
 
+    register(formData)
+    router.push('/home')
 
-    const { name, email, password } = formData;
+    setIsSubmitting(false)
+  }
 
-    //console.log('Inicio de sesión con:', { name, email, password }) //  --> envío datos
-
-    setTimeout(() => {
-      console.log('Registro con:', formData)
-      setIsSubmitting(false)
-      setFormData({
-        name: '',
-        email: '',
-        password: ''
-      })
-    }, 1500)
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
   const toggleLanguage = () => {

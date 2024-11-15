@@ -1,5 +1,6 @@
-'use client'
+"use client"
 
+import * as React from "react"
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -10,30 +11,77 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { CalendarIcon, MapPinIcon, UsersIcon, MoonIcon, SunIcon, GlobeIcon, SearchIcon, MenuIcon } from 'lucide-react'
+import { Calendar } from "@/components/ui/calendar"
+import { CalendarIcon, MapPinIcon, UsersIcon, SearchIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
-import { useTheme } from 'next-themes'
+import { useSearch } from './components/search'
 import datas from '../data/data.json'
 
 
 const SearchForm = () => {
   const { t } = useLanguage()
+  const { searchListings } = useSearch()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [date, setDate] = useState(null)
+  const [showCalendar, setShowCalendar] = useState(false)
+
+  const toggleCalendar = () => setShowCalendar((prev) => !prev)
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    searchListings(searchQuery)
+  }
 
   return (
-    <div className="relative">
-      <div className="flex flex-col md:flex-row gap-2 p-2 bg-background dark:bg-gray-800 rounded-full shadow-lg ">
+    <form onSubmit={handleSearch} className="relative">
+      <div className="flex flex-col md:flex-row gap-2 p-2 bg-background dark:bg-gray-800 rounded-full shadow-lg">
         <div className="flex-1 min-w-[200px]">
-          <Label htmlFor="location" className="sr-only">{t('location')}</Label>
+          <Label htmlFor="search" className="sr-only">{t('search')}</Label>
           <div className="relative">
-            <MapPinIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input id="location" placeholder={t('whereTo')} className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary" />
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input 
+              id="search" 
+              placeholder={t('whereTo')} 
+              className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
           </div>
         </div>
-        <div className="flex-1 min-w-[200px]">
-          <Label htmlFor="dates" className="sr-only">{t('dates')}</Label>
+        <div className="relative flex-1 min-w-[200px]">
+          <Label htmlFor="dates" className="sr-only">
+            {t('dates')}
+          </Label>
+          
           <div className="relative">
-            <CalendarIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input id="dates" placeholder={t('addDates')} className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary" />
+            <CalendarIcon
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground cursor-pointer"
+              onClick={toggleCalendar}
+            />
+
+            <Input
+              id="dates"
+              placeholder={t('addDates')}
+              className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary"
+              value={date ? date.toLocaleDateString() : ''}
+              onFocus={toggleCalendar} // Abrir el calendario al hacer foco
+              onChange={(e) => {}}
+              readOnly
+            />
+
+            {showCalendar && (
+              <div className="absolute top-12 left-0 z-10">
+                <Calendar
+                  mode="single"
+                  selected={date}
+                  onSelect={(newDate) => {
+                    setDate(newDate)
+                    setShowCalendar(false) // Cerrar el calendario al seleccionar una fecha
+                  }}
+                  className="rounded-md border bg-white shadow-lg"
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="flex-1 min-w-[200px]">
@@ -54,11 +102,11 @@ const SearchForm = () => {
           </div>
         </div>
       </div>
-      <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full w-12 h-12 bg-primary text-primary-foreground hover:bg-primary/90">
+      <Button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full w-12 h-12 bg-primary text-primary-foreground hover:bg-primary/90">
         <SearchIcon className="h-5 w-5" />
         <span className="sr-only">{t('search')}</span>
       </Button>
-    </div>
+    </form>
   )
 }
 
@@ -77,7 +125,6 @@ const ListingCard = ({ listing, t }) => {
 
     setFormattedDescription(formatDescription(listing.description));
   }, [listing.description]);
-
 
   return (
     <Dialog>
@@ -132,25 +179,17 @@ const ListingCard = ({ listing, t }) => {
 }
 
 export default function HomePage() {
-  const { language, setLanguage, t } = useLanguage()
+  const { language, t } = useLanguage()
+  const { searchResults } = useSearch()
   const [data, setData] = useState({ categories: [], listings: [] })
-  const { theme, setTheme } = useTheme()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [loginOpen, setLoginOpen] = useState(false)
-  const [registerOpen, setRegisterOpen] = useState(false)
-  
-
 
   useEffect(() => {
-    setData(datas);
+    setData(datas)
   }, [])
-
-  
 
   return (
     <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
-      <div className="container mx-auto px-4 py-32 ">
-
+      <div className="container mx-auto px-4 py-32">
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">{t('findYourNextAdventure')}</h2>
           <SearchForm />
@@ -170,7 +209,7 @@ export default function HomePage() {
           </TabsList>
 
           {data.categories.map((category, index) => {
-            const filteredListings = data.listings.filter(listing =>
+            const filteredListings = searchResults.filter(listing =>
               category.name.toLowerCase() === 'todo' || listing.category === category.name.toLowerCase()
             )
 

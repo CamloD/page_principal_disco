@@ -1,27 +1,42 @@
-// Helper function to get users from localStorage
-const getUsers = () => {
-    const users = localStorage.getItem('users')
-    return users ? JSON.parse(users) : []
+'use client'
+
+import React, { createContext, useContext, useState, useEffect } from 'react'
+
+const AuthContext = createContext()
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      setUser(JSON.parse(storedUser))
+    }
+  }, [])
+
+  const login = (userData) => {
+    setUser(userData)
+    localStorage.setItem('user', JSON.stringify(userData))
   }
-  
-  // Helper function to save users to localStorage
-  const saveUsers = (users) => {
+
+  const logout = () => {
+    setUser(null)
+    localStorage.removeItem('user')
+  }
+
+  const register = (userData) => {
+
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    users.push(userData)
     localStorage.setItem('users', JSON.stringify(users))
+    login(userData)
   }
-  
-  export function saveUser(user) {
-    const users = getUsers()
-    users.push(user)
-    saveUsers(users)
-  }
-  
-  export function findUser(email, password) {
-    const users = getUsers()
-    return users.find(user => user.email === email && user.password === password)
-  }
-  
-  // New function to check if a user already exists
-  export function userExists(email) {
-    const users = getUsers()
-    return users.some(user => user.email === email)
-  }
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout, register }}>
+      {children}
+    </AuthContext.Provider>
+  )
+}
+
+export const useAuth = () => useContext(AuthContext)

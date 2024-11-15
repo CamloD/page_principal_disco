@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -9,21 +10,19 @@ import { Label } from "@/components/ui/label"
 import { GlobeIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
+import { useAuth } from 'app/Auth/auth'
 
 export default function LoginPage() {
-
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const { language, setLanguage, t } = useLanguage()
-  const { theme, setTheme } = useTheme()
   const [showPassword, setShowPassword] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-
+  const { language, setLanguage, t } = useLanguage()
+  const { theme, setTheme } = useTheme()
+  const { login } = useAuth()
+  const router = useRouter()
 
   const handleInputChange = (e) => {
     const { name, value } = e.target
@@ -45,22 +44,20 @@ export default function LoginPage() {
     
     setIsSubmitting(true)
     
-    const { email, password } = formData;
+    const { email, password } = formData
 
+    // In a real application, you would verify these credentials with a server
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const user = users.find(u => u.email === email && u.password === password)
 
-    // console.log('Inicio de sesión con:', { email, password }) //  --> envío datos
+    if (user) {
+      login(user)
+      router.push('/home')
+    } else {
+      alert('Invalid credentials')
+    }
 
-
-    
-
-    setTimeout(() => {
-      console.log('Registro con:', formData)
-      setIsSubmitting(false)
-      setFormData({
-        email: '',
-        password: ''
-      })
-    }, 1500)
+    setIsSubmitting(false)
   }
 
   const togglePasswordVisibility = () => {
@@ -79,7 +76,9 @@ export default function LoginPage() {
             <CardTitle className="text-2xl font-bold">{t('login')}</CardTitle>
             <div className="flex space-x-2">
               <Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="rounded-full">
-                {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+                {theme === 'dark' ? <SunIcon className="h-5 w-5" /> :
+                  <MoonIcon className="h-5 w-5" />
+                }
                 <span className="sr-only">{theme === 'dark' ? t('lightMode') : t('darkMode')}</span>
               </Button>
               <Button variant="ghost" size="icon" onClick={toggleLanguage} className="rounded-full">
@@ -117,17 +116,17 @@ export default function LoginPage() {
                     className="rounded-full bg-background/50 backdrop-blur-sm border-2 border-primary/20 focus:border-primary pr-20"
                   />
                   <Button
-                      type="button"
-                      variant="ghost"
-                      className="absolute right-0 top-0 h-full px-3 rounded-r-full"
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? t('hide') : t('show')}
-                    </Button>
+                    type="button"
+                    variant="ghost"
+                    className="absolute right-0 top-0 h-full px-3 rounded-r-full"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? t('hide') : t('show')}
+                  </Button>
                 </div>
               </div>
               <Button type="submit" className="w-full rounded-full" disabled={isSubmitting}>
-                {isSubmitting ? t('loading') : t('register')}
+                {isSubmitting ? t('loading') : t('login')}
               </Button>
             </form>
           </CardContent>
