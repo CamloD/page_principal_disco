@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useCart } from 'app/contexts/cart_context'
 import { useLanguage } from 'app/contexts/LanguageContext'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import Image from 'next/image'
 import Link from 'next/link'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -25,20 +25,20 @@ export default function CartPage() {
         <>
           {cart.map((item) => (
             <Card key={item.id} className="mb-4">
-              <CardContent className="flex items-center p-4">
+              <CardContent className="flex flex-col sm:flex-row items-center p-4">
                 <Image
                   src={item.image}
                   alt={item.title}
                   width={100}
                   height={100}
-                  className="object-cover rounded-lg mr-4"
+                  className="object-cover rounded-lg mr-4 mb-4 sm:mb-0"
                 />
                 <div className="flex-grow">
                   <h2 className="text-xl font-semibold">{item.title}</h2>
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
+                  <p className="text-sm text-muted-foreground line-clamp-2 sm:line-clamp-none">{item.description}</p>
                   <p className="text-lg font-bold mt-2">${item.price}</p>
                 </div>
-                <Button variant="destructive" onClick={() => removeFromCart(item.id)}>
+                <Button variant="destructive" onClick={() => removeFromCart(item.id)} className="mt-4 sm:mt-0">
                   {t('remove')}
                 </Button>
               </CardContent>

@@ -6,8 +6,9 @@
       "esnext"
     ],
     "allowJs": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "strict": false,
     "noEmit": true,
     "incremental": true,
     "module": "esnext",
@@ -35,7 +36,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/contexts/languaje_page.tsx", "app/contexts/languaje_page.tsx", "app/login/page.jsx", "app/pagres/pages/components/search.jsx", "app/pages/api/users.js", "app/checkout/page.jsx"  ],
+, "app/contexts/languaje_page.tsx", "app/contexts/languaje_page.tsx", "app/login/page.jsx", "app/pagres/pages/components/search.jsx", "app/pages/api/users.js", "app/checkout/page.tsx", "app/home/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

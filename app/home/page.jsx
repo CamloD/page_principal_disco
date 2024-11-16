@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from "react"
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from "@/components/ui/button"
@@ -134,7 +134,7 @@ const ListingItem = ({ listing, t, onAddToCart }) => {
   }, [listing.description]);
 
   return (
-    <div className="flex items-center space-x-4 p-6 border-b last:border-b-0">
+    <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 p-6 border-b last:border-b-0">
       <Image
         src={listing.image}
         alt={listing.title}
@@ -144,7 +144,7 @@ const ListingItem = ({ listing, t, onAddToCart }) => {
       />
       <div className="flex-grow">
         <h3 className="text-xl font-semibold mb-2">{listing.title}</h3>
-        <p className="text-sm text-muted-foreground mb-2">{formattedDescription}</p>
+        <p className="text-sm text-muted-foreground mb-2 line-clamp-2 md:line-clamp-none">{formattedDescription}</p>
         <p className="text-sm font-medium">{listing.date}</p>
         <p className="text-lg font-bold mt-2">${listing.price}</p>
       </div>
@@ -183,10 +183,9 @@ const ListingItem = ({ listing, t, onAddToCart }) => {
 }
 
 const ShoppingCart = ({ cart, removeFromCart, t }) => {
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const total = useMemo(() => cart.reduce((sum, item) => sum + item.price, 0), [cart]);
 
   const handleCheckoutComplete = () => {
-    // Clear the cart or perform any other necessary actions
     localStorage.removeItem('cart');
     window.location.reload();
   };
@@ -206,8 +205,8 @@ const ShoppingCart = ({ cart, removeFromCart, t }) => {
         <div className="mt-4 max-h-[60vh] overflow-y-auto">
           {cart.map((item) => (
             <div key={item.id} className="flex justify-between items-center mb-4 pb-4 border-b">
-              <div>
-                <h4 className="font-semibold">{item.title}</h4>
+              <div className="flex-grow pr-4">
+                <h4 className="font-semibold line-clamp-1">{item.title}</h4>
                 <p className="text-sm text-muted-foreground">${item.price}</p>
               </div>
               <Button variant="destructive" size="sm" onClick={() => removeFromCart(item.id)}>
