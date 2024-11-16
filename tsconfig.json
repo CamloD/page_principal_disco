@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/contexts/languaje_page.tsx", "app/contexts/languaje_page.tsx", "app/login/page.jsx", "app/pagres/pages/components/search.jsx"  ],
+, "app/contexts/languaje_page.tsx", "app/contexts/languaje_page.tsx", "app/login/page.jsx", "app/pagres/pages/components/search.jsx", "app/pages/api/users.js", "app/checkout/page.jsx"  ],
   "exclude": [
     "node_modules"
   ]

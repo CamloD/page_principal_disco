@@ -7,6 +7,8 @@ import { LanguageProvider } from './contexts/LanguageContext';
 import { ThemeProvider } from 'next-themes'
 import { SearchProvider } from './home/components/search'
 import { AuthProvider } from './Auth/auth'
+import { CartProvider } from 'app/contexts/cart_context'
+import { ErrorBoundary } from 'app/contexts/error_context'
 
 const fontHeading = Inter({
   subsets: ['latin'],
@@ -28,19 +30,25 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" suppressHydrationWarning>
-      <body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
+  <html lang="es" suppressHydrationWarning>
+    <body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
+      <ErrorBoundary>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
             <AuthProvider>
-              <SearchProvider>
-                <Header/>
-                {children}
-              </SearchProvider>
+              <CartProvider>
+                <SearchProvider>
+                  <Header />
+                  <main className="pt-16"> {/* Add padding-top to account for fixed header */}
+                    {children}
+                  </main>
+                </SearchProvider>
+              </CartProvider>
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
-      </body>
-    </html>
-  );
+      </ErrorBoundary>
+    </body>
+  </html>
+  )
 }

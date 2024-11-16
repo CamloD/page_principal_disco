@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import * as React from "react"
 import { useState, useEffect } from 'react'
@@ -12,24 +12,26 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon, MapPinIcon, UsersIcon, SearchIcon } from 'lucide-react'
+import { CalendarIcon, MapPinIcon, UsersIcon, SearchIcon, ShoppingCartIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useSearch } from './components/search'
-import datas from '../data/data.json'
+import { useAuth } from 'app/Auth/auth'
+import datas from 'app/data/data.json'
+import Header from 'app/pages/components/Header'
+import Checkout from 'app/checkout/page'
+import { useCart } from 'app/contexts/cart_context'
 
-
-const SearchForm = () => {
+const SearchForm = ({ onSearch }) => {
   const { t } = useLanguage()
-  const { searchListings } = useSearch()
   const [searchQuery, setSearchQuery] = useState('')
-  const [date, setDate] = useState(null)
+  const [startDate, setStartDate] = useState(null)
+  const [endDate, setEndDate] = useState(null)
   const [showCalendar, setShowCalendar] = useState(false)
-
-  const toggleCalendar = () => setShowCalendar((prev) => !prev)
+  const [guests, setGuests] = useState(1)
 
   const handleSearch = (e) => {
     e.preventDefault()
-    searchListings(searchQuery)
+    onSearch({ searchQuery, startDate, endDate, guests })
   }
 
   return (
@@ -49,36 +51,40 @@ const SearchForm = () => {
           </div>
         </div>
         <div className="relative flex-1 min-w-[200px]">
-          <Label htmlFor="dates" className="sr-only">
-            {t('dates')}
-          </Label>
-          
+          <Label htmlFor="dates" className="sr-only">{t('dates')}</Label>
           <div className="relative">
             <CalendarIcon
               className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground cursor-pointer"
-              onClick={toggleCalendar}
+              onClick={() => setShowCalendar(!showCalendar)}
             />
-
             <Input
               id="dates"
               placeholder={t('addDates')}
               className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary"
-              value={date ? date.toLocaleDateString() : ''}
-              onFocus={toggleCalendar} // Abrir el calendario al hacer foco
-              onChange={(e) => {}}
+              value={startDate && endDate ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}` : ''}
               readOnly
+              onClick={() => setShowCalendar(!showCalendar)}
             />
-
             {showCalendar && (
-              <div className="absolute top-12 left-0 z-10">
+              <div className="absolute top-12 left-0 z-10 flex">
                 <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(newDate) => {
-                    setDate(newDate)
-                    setShowCalendar(false) // Cerrar el calendario al seleccionar una fecha
+                  mode="range"
+                  selected={{ from: startDate, to: endDate }}
+                  onSelect={({ from, to }) => {
+                    setStartDate(from)
+                    setEndDate(to)
                   }}
                   className="rounded-md border bg-white shadow-lg"
+                />
+                <Calendar
+                  mode="range"
+                  selected={{ from: startDate, to: endDate }}
+                  onSelect={({ from, to }) => {
+                    setStartDate(from)
+                    setEndDate(to)
+                  }}
+                  className="rounded-md border bg-white shadow-lg ml-2"
+                  month={new Date(new Date().setMonth(new Date().getMonth() + 1))}
                 />
               </div>
             )}
@@ -88,15 +94,16 @@ const SearchForm = () => {
           <Label htmlFor="guests" className="sr-only">{t('guests')}</Label>
           <div className="relative">
             <UsersIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Select>
+            <Select value={guests.toString()} onValueChange={(value) => setGuests(parseInt(value))}>
               <SelectTrigger className="pl-10 py-6 rounded-full border-0 bg-transparent focus:ring-2 focus:ring-primary">
                 <SelectValue placeholder={t('addGuests')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="1">1 {t('guest')}</SelectItem>
-                <SelectItem value="2">2 {t('guests')}</SelectItem>
-                <SelectItem value="3">3 {t('guests')}</SelectItem>
-                <SelectItem value="4">4+ {t('guests')}</SelectItem>
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <SelectItem key={num} value={num.toString()}>
+                    {num} {num === 1 ? t('guest') : t('guests')}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -110,7 +117,7 @@ const SearchForm = () => {
   )
 }
 
-const ListingCard = ({ listing, t }) => {
+const ListingItem = ({ listing, t, onAddToCart }) => {
   const [formattedDescription, setFormattedDescription] = useState('');
 
   useEffect(() => {
@@ -127,52 +134,92 @@ const ListingCard = ({ listing, t }) => {
   }, [listing.description]);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Card className="overflow-hidden transition-all hover:shadow-lg hover:scale-105 bg-card dark:bg-gray-800 cursor-pointer">
-          <div className="relative">
-            <Image
-              src={listing.image}
-              alt={listing.title}
-              width={800}
-              height={600}
-              className="w-full h-64 object-cover"
-            />
-            <div className="absolute top-4 right-4 bg-background dark:bg-gray-800 rounded-full px-3 py-1 text-sm font-semibold">
-              ${listing.price}
-            </div>
-          </div>
-          <CardHeader>
-            <CardTitle className="text-xl">{listing.title}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-2">{formattedDescription}</p>
-            <p className="text-sm font-medium">{listing.date}</p>
-          </CardContent>
-          <CardFooter>
-            <Button className="w-full rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
+    <div className="flex items-center space-x-4 p-6 border-b last:border-b-0">
+      <Image
+        src={listing.image}
+        alt={listing.title}
+        width={150}
+        height={150}
+        className="object-cover rounded-lg"
+      />
+      <div className="flex-grow">
+        <h3 className="text-xl font-semibold mb-2">{listing.title}</h3>
+        <p className="text-sm text-muted-foreground mb-2">{formattedDescription}</p>
+        <p className="text-sm font-medium">{listing.date}</p>
+        <p className="text-lg font-bold mt-2">${listing.price}</p>
+      </div>
+      <div className="flex flex-col space-y-2">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">
               {t('viewDetails')}
             </Button>
-          </CardFooter>
-        </Card>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[1190px] text-foreground dark:text-gray-100">
+            <DialogHeader>
+              <DialogTitle>{listing.title}</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <Image
+                src={listing.image}
+                alt={listing.title}
+                width={800}
+                height={600}
+                className="w-full h-52 object-cover rounded-lg"
+              />
+              <p>{formattedDescription}</p>
+              <p><strong>{t('category')}:</strong> {t(listing.category)}</p>
+              <p><strong>{t('date')}:</strong> {listing.date}</p>
+              <p><strong>{t('price')}:</strong> ${listing.price}</p>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Button onClick={() => onAddToCart(listing)}>
+          {t('addToCart')}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const ShoppingCart = ({ cart, removeFromCart, t }) => {
+  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  const handleCheckoutComplete = () => {
+    // Clear the cart or perform any other necessary actions
+    localStorage.removeItem('cart');
+    window.location.reload();
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="fixed bottom-4 right-4 rounded-full">
+          <ShoppingCartIcon className="mr-2 h-4 w-4" />
+          {cart.length}
+        </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[1190px] text-foreground dark:text-gray-100">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{listing.title}</DialogTitle>
+          <DialogTitle>{t('shoppingCart')}</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <Image
-            src={listing.image}
-            alt={listing.title}
-            width={800}
-            height={600}
-            className="w-full h-52 object-cover rounded-lg"
-          />
-          <p>{formattedDescription}</p>
-          {/*<p><strong>{t('category')}:</strong> {t(listing.category)}</p>*/}
-          <p><strong>{t('date')}:</strong> {listing.date}</p>
-          <p><strong>{t('price')}:</strong> ${listing.price}</p>
+        <div className="mt-4 max-h-[60vh] overflow-y-auto">
+          {cart.map((item) => (
+            <div key={item.id} className="flex justify-between items-center mb-4 pb-4 border-b">
+              <div>
+                <h4 className="font-semibold">{item.title}</h4>
+                <p className="text-sm text-muted-foreground">${item.price}</p>
+              </div>
+              <Button variant="destructive" size="sm" onClick={() => removeFromCart(item.id)}>
+                {t('remove')}
+              </Button>
+            </div>
+          ))}
         </div>
+        <div className="mt-4 font-bold text-lg">
+          {t('total')}: ${total.toFixed(2)}
+        </div>
+        <Checkout cart={cart} onCheckoutComplete={handleCheckoutComplete} />
       </DialogContent>
     </Dialog>
   )
@@ -180,19 +227,32 @@ const ListingCard = ({ listing, t }) => {
 
 export default function HomePage() {
   const { language, t } = useLanguage()
-  const { searchResults } = useSearch()
+  const { user } = useAuth()
+  const { cart, addToCart, removeFromCart } = useCart()
   const [data, setData] = useState({ categories: [], listings: [] })
+  const [filteredListings, setFilteredListings] = useState([])
 
   useEffect(() => {
     setData(datas)
+    setFilteredListings(datas.listings)
   }, [])
+
+  const handleSearch = ({ searchQuery, startDate, endDate, guests }) => {
+    const filtered = data.listings.filter(listing => 
+      listing.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      listing.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      listing.category.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    setFilteredListings(filtered)
+  }
 
   return (
     <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
+      <Header />
       <div className="container mx-auto px-4 py-32">
         <div className="mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">{t('findYourNextAdventure')}</h2>
-          <SearchForm />
+          <SearchForm onSearch={handleSearch} />
         </div>
         
         <Tabs defaultValue="todo" className="space-y-8">
@@ -208,23 +268,20 @@ export default function HomePage() {
             ))}
           </TabsList>
 
-          {data.categories.map((category, index) => {
-            const filteredListings = searchResults.filter(listing =>
-              category.name.toLowerCase() === 'todo' || listing.category === category.name.toLowerCase()
-            )
-
-            return (
-              <TabsContent key={index} value={category.name.toLowerCase()}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                  {filteredListings.map((listing) => (
-                    <ListingCard key={listing.id} listing={listing} t={t} />
+          {data.categories.map((category, index) => (
+            <TabsContent key={index} value={category.name.toLowerCase()}>
+              <div className="space-y-8">
+                {filteredListings
+                  .filter(listing => category.name.toLowerCase() === 'todo' || listing.category === category.name.toLowerCase())
+                  .map((listing) => (
+                    <ListingItem key={listing.id} listing={listing} t={t} onAddToCart={addToCart} />
                   ))}
-                </div>
-              </TabsContent>
-            )
-          })}
+              </div>
+            </TabsContent>
+          ))}
         </Tabs>
       </div>
+      <ShoppingCart cart={cart} removeFromCart={removeFromCart} t={t} />
     </div>
   )
 }

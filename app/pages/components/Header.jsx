@@ -1,14 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { useState, useEffect, useRef } from 'react'
-import { Button } from "@/components/ui/button"
 import Link from 'next/link'
-import { useLanguage } from '../../contexts/LanguageContext'
-import { CalendarIcon, MapPinIcon, UsersIcon, MoonIcon, SunIcon, GlobeIcon, SearchIcon, MenuIcon, LogOutIcon } from 'lucide-react'
+import Image from 'next/image'
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { useLanguage } from 'app/contexts/LanguageContext'
 import { useTheme } from 'next-themes'
 import { useAuth } from 'app/Auth/auth'
+import { useCart } from 'app/contexts/cart_context'
+import { CalendarIcon, MapPinIcon, UsersIcon, MoonIcon, SunIcon, GlobeIcon, SearchIcon, MenuIcon, LogOutIcon, UserIcon, ShoppingCartIcon } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+
 
 const Header = () => {
   const { language, setLanguage, t } = useLanguage()
@@ -17,7 +21,9 @@ const Header = () => {
   const [headerShadow, setHeaderShadow] = useState('shadow-sm')
   const headerRef = useRef(null)
   const { theme, setTheme } = useTheme()
+  const [isClient, setIsClient] = useState(false)
   const { user, logout } = useAuth()
+  const { cart } = useCart()
 
   const updateHeaderHeight = () => {
     if (headerRef.current) {
@@ -33,6 +39,9 @@ const Header = () => {
   }
 
   useEffect(() => {
+    const storedTheme = localStorage.getItem('theme')
+    setIsClient(true)
+    
     window.addEventListener('scroll', handleScroll)
     window.addEventListener('resize', () => {
       updateHeaderHeight()
@@ -41,6 +50,12 @@ const Header = () => {
     updateHeaderHeight()
     handleScroll()
 
+    if (storedTheme) {
+      setTheme(storedTheme)
+    } else {     
+      setTheme('light')
+    }
+    
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', () => {
@@ -48,7 +63,36 @@ const Header = () => {
         handleScroll()
       })
     }
-  }, [handleScroll, headerHeight])
+  }, [handleScroll, headerHeight, setTheme])
+
+  useEffect(() => {
+    const loadGoogleTranslate = () => {
+      const script = document.createElement('script');
+      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.async = true;
+      document.body.appendChild(script);
+
+      window.googleTranslateElementInit = () => {
+        new window.google.translate.TranslateElement(
+          {
+            pageLanguage: 'es',
+            includedLanguages: 'en,es,fr,de,it,pt',
+            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false,
+          },
+          'google_translate_element'
+        );
+      };
+    };
+
+    if (typeof window !== 'undefined') {
+      loadGoogleTranslate();
+    }
+  }, []);
+
+  if (!isClient || theme === null) {
+    return null
+  }
 
   const initialColor = 'rgba(26, 26, 26, 0)'
   const scrolledColor = 'rgba(26, 26, 26, 0.97)'
@@ -68,7 +112,7 @@ const Header = () => {
   }
 
   return (
-    <header className="shadow-md fixed top-0 left-0 w-full bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300 z-50">
+    <header ref={headerRef} className={`fixed top-0 left-0 w-full bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300 z-50 ${headerShadow}`}>
       <div className="container mx-auto px-1 pt-5 pb-2">
         <div className="flex justify-between items-center pb-5 pt-2">
           <Link href="/home">
@@ -93,14 +137,59 @@ const Header = () => {
                   <GlobeIcon className="h-5 w-5" />
                   <span className="sr-only">{t('changeLanguage')}</span>
                 </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" size="sm" className="rounded-full">
+                      <GlobeIcon className="h-5 w-5 mr-2" />
+                      {t('translate')}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0">
+                    <div id="google_translate_element" className="google-translate-container"></div>
+                  </PopoverContent>
+                </Popover>
+                <Link href="/cart">
+                  <Button variant="ghost" size="icon" className="rounded-full relative">
+                    <ShoppingCartIcon className="h-5 w-5" />
+                    {cart.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {cart.length}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
               </div>
 
               <div className="flex items-center space-x-1 pl-5">
                 {user ? (
-                  <>
-                    <span className="text-sm font-medium">{user.name}</span>
-                    <Button variant="ghost" onClick={logout}><LogOutIcon className="h-5 w-5" /></Button>
-                  </>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="ghost" className="flex items-center space-x-2">
+                        <Image
+                          src={user.photo || '/default-avatar.png'}
+                          alt={user.name}
+                          width={32}
+                          height={32}
+                          className="rounded-full"
+                        />
+                        <span>{user.name}</span>
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56">
+                      <div className="flex flex-col space-y-2">
+                        <Link href="/profile">
+                          <Button variant="ghost" className="w-full justify-start">
+                            <UserIcon className="mr-2 h-4 w-4" />
+                            {t('profile')}
+                          </Button>
+                        </Link>
+                        <Button variant="ghost" onClick={logout} className="w-full justify-start">
+                          <LogOutIcon className="mr-2 h-4 w-4" />
+                          {t('logout')}
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 ) : (
                   <>
                     <Link href="/login" rel="noopener noreferrer">
@@ -144,12 +233,36 @@ const Header = () => {
                   )}
                 </Button>
                 <Button variant="outline" onClick={toggleLanguage} className="rounded-full justify-center">
-                  <GlobeIcon className="h-5 w-20 mr-1" />
-                  {t('changeLanguage')}
+                  <GlobeIcon className="h-5 w-5 mr-2" />
+                  {language === 'es' ? 'EN' : 'ES'}
                 </Button>
+                <div id="google_translate_element_mobile" className="google-translate-container"></div>
+                <Link href="/cart">
+                  <Button variant="outline" className="rounded-full justify-center relative">
+                    <ShoppingCartIcon className="h-5 w-20 mr-1" />
+                    Cart ({cart.length})
+                    {cart.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                        {cart.length}
+                      </span>
+                    )}
+                  </Button>
+                </Link>
                 {user ? (
                   <>
-                    <span className="text-sm font-medium">{user.name}</span>
+                    <div className="flex items-center space-x-2">
+                      <Image
+                        src={user.photo || '/default-avatar.png'}
+                        alt={user.name}
+                        width={32}
+                        height={32}
+                        className="rounded-full"
+                      />
+                      <span>{user.name}</span>
+                    </div>
+                    <Link href="/profile">
+                      <Button variant="ghost" className="rounded-full">{t('profile')}</Button>
+                    </Link>
                     <Button variant="ghost" onClick={logout} className="rounded-full">{t('logout')}</Button>
                   </>
                 ) : (

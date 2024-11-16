@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { GlobeIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
-import { useAuth } from 'app/Auth/auth'
+import { useAuth } from '../Auth/auth'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -45,7 +45,10 @@ export default function RegisterPage() {
 
     setIsSubmitting(true)
 
-    register(formData)
+    register({
+      ...formData,
+      photo: '/default-avatar.png'
+    })
     router.push('/home')
 
     setIsSubmitting(false)
