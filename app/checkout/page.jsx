@@ -1,4 +1,3 @@
-// components/Checkout.jsx
 'use client'
 
 import { useState, useMemo } from 'react'
@@ -6,12 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useLanguage } from '../contexts/LanguageContext'
-import { useCart } from '../contexts/CartContext' // Importar el hook del contexto
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
-export default function Checkout() {
+export default function Checkout({ cart, onCheckoutComplete }) {
   const { t } = useLanguage()
-  const { cart, onCheckoutComplete } = useCart() // Obtener cart y onCheckoutComplete del contexto
   const [isOpen, setIsOpen] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
