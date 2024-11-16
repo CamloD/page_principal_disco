@@ -18,10 +18,8 @@ export default function Checkout({ cart, onCheckoutComplete }) {
     cvv: ''
   })
 
-  // Memoización del total para evitar recalculos innecesarios
   const total = useMemo(() => cart.reduce((sum, item) => sum + item.price, 0), [cart])
 
-  // Manejo de cambios en el formulario
   const handleChange = (e) => {
     const { id, value } = e.target
     setFormData((prevState) => ({
@@ -33,7 +31,6 @@ export default function Checkout({ cart, onCheckoutComplete }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    // Aquí puedes hacer más validaciones, como verificar la validez del email y la tarjeta
     if (!formData.name || !formData.email || !formData.card || !formData.expiry || !formData.cvv) {
       alert(t('completeFields'))
       return
