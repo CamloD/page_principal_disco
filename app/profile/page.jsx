@@ -67,7 +67,7 @@ export default function UserProfile() {
   const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [photo, setPhoto] = useState('/default-avatar.png')
+  const [photo, setPhoto] = useState('default-avatar.png')
   const [bio, setBio] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [crop, setCrop] = useState({ x: 0, y: 0 })
@@ -83,7 +83,7 @@ export default function UserProfile() {
       if (user) {
         setName(user.name || '')
         setEmail(user.email || '')
-        setPhoto(user.photo || '/default-avatar.png')
+        setPhoto(user.photo || 'default-avatar.png')
         setBio(user.bio || '')
         setIsLoading(false)
       } else {
@@ -129,7 +129,7 @@ export default function UserProfile() {
   }
 
   const handleRemovePhoto = () => {
-    setPhoto('/default-avatar.png')
+    setPhoto('default-avatar.png')
     updateUser({ ...user, photo: 'default-avatar.png' })
   }
 
@@ -181,7 +181,7 @@ export default function UserProfile() {
                     className="hidden"
                     onChange={handlePhotoChange}
                   />
-                  {photo !== '/default-avatar.png' && (
+                  {photo !== 'default-avatar.png' && (
                     <Button type="button" variant="outline" onClick={handleRemovePhoto}>
                       {t('removePhoto')}
                     </Button>
