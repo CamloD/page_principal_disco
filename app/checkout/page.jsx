@@ -137,7 +137,7 @@ export default function ImprovedCheckoutPage() {
   return (
     <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'}`}>
       <Header />
-      <main className="container mx-auto px-4 py-8 mt-20">
+      <main className="container mx-auto px-4 py-8">
         <Card className="max-w-4xl mx-auto">
           <CardHeader>
             <CardTitle className="text-3xl font-bold">{t('checkout')}</CardTitle>
