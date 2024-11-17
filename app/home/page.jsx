@@ -21,6 +21,8 @@ import { format } from 'date-fns'
 import { DateRange } from 'react-day-picker'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useTheme } from 'next-themes'
+import { useCheckout } from 'app/contexts/checkout_context'
+import { useRouter } from 'next/navigation'
 
 
 const SearchForm = ({ onSearch }) => {
@@ -206,6 +208,18 @@ const ListingItem = ({ listing, t, onAddToCart, view }) => {
 
 const ShoppingCart = ({ cart, removeFromCart, t }) => {
   const total = cart.reduce((sum, item) => sum + item.price, 0)
+  const { startCheckout } = useCheckout()
+  const { user } = useAuth()
+  const router = useRouter()
+
+  const handleProceedToCheckout = () => {
+    if (user) {
+      startCheckout()
+      router.push('/checkout') 
+    } else {
+      router.push('/login') 
+    }
+  }
 
   return (
     <Dialog>
@@ -237,9 +251,7 @@ const ShoppingCart = ({ cart, removeFromCart, t }) => {
         <div className="mt-4 font-bold text-lg">
           {t('total')}: ${total.toFixed(2)}
         </div>
-        <Link href="/checkout" passHref>
-          <Button className="w-full mt-4">{t('proceedToCheckout')}</Button>
-        </Link>
+        <Button onClick={handleProceedToCheckout} className="w-full mt-4">{t('proceedToCheckout')}</Button>
       </DialogContent>
     </Dialog>
   )

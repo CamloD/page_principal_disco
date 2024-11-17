@@ -10,7 +10,7 @@ import { useTheme } from 'next-themes'
 import { useAuth } from 'app/Auth/auth'
 import { useCart } from 'app/contexts/cart_context'
 import { MoonIcon, SunIcon, GlobeIcon, MenuIcon, LogOutIcon, UserIcon, ShoppingCartIcon } from 'lucide-react'
-import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,15 +76,19 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  // Agregar efecto al body para evitar overflow: hidden en el body
   useEffect(() => {
     if (isMenuOpen) {
+      // Cuando el menú está abierto, evitar el desplazamiento
       document.body.style.overflow = 'hidden'
     } else {
+      // Cuando el menú está cerrado, restaurar el desplazamiento
       document.body.style.overflow = 'auto'
     }
 
     return () => {
-      document.body.style.overflow = 'auto' 
+      // Limpiar el estilo cuando el componente se desmonte o el estado cambie
+      document.body.style.overflow = 'auto'
     }
   }, [isMenuOpen])
 
@@ -107,37 +111,36 @@ const Header = () => {
               {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
             </Button>
             <Popover>
-  <PopoverTrigger asChild>
-    <Button variant="outline" size="sm" className="rounded-full">
-      <GlobeIcon className="h-5 w-5 mr-2" />
-      {t('translate')}
-    </Button>
-  </PopoverTrigger>
+              <PopoverTrigger asChild>
+                <Button variant="outline" size="sm" className="rounded-full">
+                  <GlobeIcon className="h-5 w-5 mr-2" />
+                  {t('translate')}
+                </Button>
+              </PopoverTrigger>
 
-  <PopoverContent
-    className="max-h-80 overflow-auto z-49 shadow-lg p-4 rounded-md border border-gray-300 dark:border-gray-500 bg-background dark:bg-gray-900"
-    side="bottom"
-    align="start"
-  >
-    {availableLanguages.map((lang) => (
-      <div
-        key={lang}
-        className="cursor-pointer  px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
-        onClick={() => setLanguage(lang)}
-      >
-        {t(lang)}
-      </div>
-    ))}
+              <PopoverContent
+                className="max-h-80 overflow-auto z-50 shadow-lg p-4 rounded-md border border-gray-300 dark:border-gray-500 bg-background dark:bg-gray-900"
+                side="bottom"
+                align="start"
+              >
+                {availableLanguages.map((lang) => (
+                  <div
+                    key={lang}
+                    className="cursor-pointer  px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+                    onClick={() => setLanguage(lang)}
+                  >
+                    {t(lang)}
+                  </div>
+                ))}
 
-    <div
-      className="cursor-pointer px-2 py-1 rounded mt-2 hover:bg-gray-200 dark:hover:bg-gray-800"
-      onClick={toggleGoogleTranslate}
-    >
-      {t('googleTranslate')}
-    </div>
-  </PopoverContent>
-</Popover>
-
+                <div
+                  className="cursor-pointer px-2 py-1 rounded mt-2 hover:bg-gray-200 dark:hover:bg-gray-800"
+                  onClick={toggleGoogleTranslate}
+                >
+                  {t('googleTranslate')}
+                </div>
+              </PopoverContent>
+            </Popover>
             <Link href="/cart">
               <Button variant="ghost" size="sm" className="rounded-full relative">
                 <ShoppingCartIcon className="h-5 w-5" />
