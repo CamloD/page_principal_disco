@@ -97,6 +97,7 @@ const translations = {
     country: 'País',
     zipCode: 'Código postal',
     placeOrder: 'Realizar pedido',
+    orderPlaced: 'Pedido realizado',
   },
   en: {
     title: 'Welcome to TravelEase',
@@ -190,6 +191,7 @@ const translations = {
     country: 'Country',
     zipCode: 'Zip code',
     placeOrder: 'Place order',
+    orderPlaced: 'Order placed',
   },
   
 }
