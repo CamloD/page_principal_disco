@@ -38,7 +38,6 @@ export default function RootLayout({ children }) {
             <AuthProvider>
               <CartProvider>
                 <SearchProvider>
-                  <Header />
                   <main className="pt-16"> {/* Add padding-top to account for fixed header */}
                     {children}
                   </main>

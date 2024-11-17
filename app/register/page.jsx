@@ -11,6 +11,7 @@ import { GlobeIcon, MoonIcon, SunIcon } from 'lucide-react'
 import { useLanguage } from '../contexts/LanguageContext'
 import { useTheme } from 'next-themes'
 import { useAuth } from '../Auth/auth'
+import Header from 'app/pages/components/Header'
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -64,7 +65,8 @@ export default function RegisterPage() {
 
   return (
     <div className="p-4 flex min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
-      <div className="mt-24 w-[448px] mx-auto flex justify-center bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300 ">
+      <Header />
+      <div className="w-[448px] mx-auto flex justify-center bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300 ">
         <Card className=" w-full max-w-md bg-card/50 backdrop-blur-sm border-primary/10 shadow-lg">
           <CardHeader className="flex justify-between items-center">
             <CardTitle className="text-2xl font-bold">{t('register')}</CardTitle>

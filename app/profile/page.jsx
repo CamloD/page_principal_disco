@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
@@ -10,15 +9,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from '../contexts/LanguageContext'
-import { useAuth } from '../Auth/auth'
+import { useAuth } from 'app/Auth/auth'
 import Cropper from 'react-easy-crop'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Slider } from "@/components/ui/slider"
+import Header from 'app/pages/components/Header'
+import { useTheme } from 'next-themes'
 
 const createImage = (url) =>
   new Promise((resolve, reject) => {
-    const image = new Image()
+    const image = new window.Image()
     image.addEventListener('load', () => resolve(image))
     image.addEventListener('error', (error) => reject(error))
     image.setAttribute('crossOrigin', 'anonymous')
@@ -29,6 +30,10 @@ const getCroppedImg = async (imageSrc, pixelCrop) => {
   const image = await createImage(imageSrc)
   const canvas = document.createElement('canvas')
   const ctx = canvas.getContext('2d')
+
+  if (!ctx) {
+    return null
+  }
 
   canvas.width = pixelCrop.width
   canvas.height = pixelCrop.height
@@ -47,6 +52,10 @@ const getCroppedImg = async (imageSrc, pixelCrop) => {
 
   return new Promise((resolve) => {
     canvas.toBlob((blob) => {
+      if (!blob) {
+        console.error('Canvas is empty')
+        return
+      }
       resolve(URL.createObjectURL(blob))
     }, 'image/jpeg')
   })
@@ -67,6 +76,7 @@ export default function UserProfile() {
   const [isCropperOpen, setIsCropperOpen] = useState(false)
   const [tempImage, setTempImage] = useState(null)
   const [deleteConfirmation, setDeleteConfirmation] = useState('')
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     const checkUser = async () => {
@@ -105,9 +115,13 @@ export default function UserProfile() {
 
   const handleCropSave = async () => {
     try {
-      const croppedImage = await getCroppedImg(tempImage, croppedAreaPixels)
-      setPhoto(croppedImage)
-      updateUser({ ...user, photo: croppedImage })
+      if (croppedAreaPixels) {
+        const croppedImage = await getCroppedImg(tempImage, croppedAreaPixels)
+        if (croppedImage) {
+          setPhoto(croppedImage)
+          updateUser({ ...user, photo: croppedImage })
+        }
+      }
       setIsCropperOpen(false)
     } catch (e) {
       console.error(e)
@@ -137,108 +151,113 @@ export default function UserProfile() {
   }
 
   return (
-    <div className="container mx-auto p-4 mt-20">
-      <Card className="max-w-2xl mx-auto bg-background dark:bg-gray-800">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">User Profile</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex flex-col items-center space-y-4">
-              <Image
-                src={photo}
-                alt="User Photo"
-                width={120}
-                height={120}
-                className="rounded-full object-cover"
-              />
-              <div className="flex space-x-2">
-                <Label htmlFor="photo" className="cursor-pointer text-primary hover:underline">
-                  Change Photo
-                </Label>
-                <Input
-                  id="photo"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handlePhotoChange}
-                />
-                {photo !== '/default-avatar.png' && (
-                  <Button type="button" variant="outline" onClick={handleRemovePhoto}>
-                    Remove Photo
-                  </Button>
-                )}
+    <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 transition-colors duration-300">
+      <Header />
+      <div className="container mx-auto p-4">
+        <Card className="max-w-2xl mx-auto bg-card dark:bg-gray-800 transition-colors duration-300">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">{t('userProfile')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="flex flex-col items-center space-y-4">
+                <div className="relative w-32 h-32">
+                  <Image
+                    src={photo}
+                    alt="User Photo"
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <Label htmlFor="photo" className="cursor-pointer text-primary hover:underline">
+                    {t('changePhoto')}
+                  </Label>
+                  <Input
+                    id="photo"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handlePhotoChange}
+                  />
+                  {photo !== '/default-avatar.png' && (
+                    <Button type="button" variant="outline" onClick={handleRemovePhoto}>
+                      {t('removePhoto')}
+                    </Button>
+                  )}
+                </div>
               </div>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="name">{t('name')}</Label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email">{t('email')}</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="bio">{t('bio')}</Label>
+                  <Textarea
+                    id="bio"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    rows={4}
+                    className="mt-1"
+                    placeholder={t('tellUsAboutYourself')}
+                  />
+                </div>
+              </div>
+              <Button type="submit" className="w-full">
+                {t('saveChanges')}
+              </Button>
+            </form>
+            <div className="mt-6">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">{t('deleteAccount')}</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>{t('areYouSure')}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      <p>{t('deleteAccountConfirmation')}</p>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <Input
+                    value={deleteConfirmation}
+                    onChange={(e) => setDeleteConfirmation(e.target.value)}
+                    placeholder={t('typeDeleteAccountToConfirm')}
+                  />
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDeleteAccount}>{t('deleteAccount')}</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="mt-1"
-                />
-              </div>
-              <div>
-                <Label htmlFor="bio">Bio</Label>
-                <Textarea
-                  id="bio"
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                  rows={4}
-                  className="mt-1"
-                  placeholder="Tell us about yourself"
-                />
-              </div>
-            </div>
-            <Button type="submit" className="w-full">
-              Save Changes
-            </Button>
-          </form>
-          <div className="mt-6">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive">Delete Account</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    <p>This action cannot be undone. Please type 'delete account' to confirm.</p>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <Input
-                  value={deleteConfirmation}
-                  onChange={(e) => setDeleteConfirmation(e.target.value)}
-                  placeholder="Type 'delete account' to confirm"
-                />
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDeleteAccount}>Delete Account</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
 
       <Dialog open={isCropperOpen} onOpenChange={setIsCropperOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle>Crop Image</DialogTitle>
+            <DialogTitle>{t('cropImage')}</DialogTitle>
           </DialogHeader>
           <div className="relative w-full h-[400px]">
             <Cropper
@@ -252,7 +271,7 @@ export default function UserProfile() {
             />
           </div>
           <div className="mt-4">
-            <Label htmlFor="zoom">Zoom</Label>
+            <Label htmlFor="zoom">{t('zoom')}</Label>
             <Slider
               id="zoom"
               min={1}
@@ -264,9 +283,9 @@ export default function UserProfile() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsCropperOpen(false)}>
-              Cancel
+              {t('cancel')}
             </Button>
-            <Button onClick={handleCropSave}>Save</Button>
+            <Button onClick={handleCropSave}>{t('save')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
