@@ -42,6 +42,7 @@
     "react-parallax": "^3.5.1",
     "react-photo-album": "^3.0.2",
     "react-swipeable": "^7.0.1",
+    "react-toastify": "^10.0.6",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"
   },

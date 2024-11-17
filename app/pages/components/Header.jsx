@@ -10,7 +10,7 @@ import { useTheme } from 'next-themes'
 import { useAuth } from 'app/Auth/auth'
 import { useCart } from 'app/contexts/cart_context'
 import { MoonIcon, SunIcon, GlobeIcon, MenuIcon, LogOutIcon, UserIcon, ShoppingCartIcon } from 'lucide-react'
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +25,7 @@ const Header = () => {
   const { cart } = useCart()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const googleTranslateRef = useRef(null)
 
   useEffect(() => {
@@ -71,16 +72,32 @@ const Header = () => {
     }
   }
 
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto' 
+    }
+  }, [isMenuOpen])
+
   if (!mounted) return null
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-background dark:bg-gray-900 shadow-md' : 'bg-background dark:bg-gray-900'}`}>
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+      <div className="container mx-auto px-4 ">
+        <div className="flex justify-between items-center h-16 ">
           <Link href="/home">
             <h1 className="text-2xl font-bold text-foreground dark:text-gray-100">Reservas</h1>
           </Link>
-          <nav className="hidden md:flex items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-4 ">
             <Button 
               variant="ghost" 
               size="sm" 
@@ -89,24 +106,38 @@ const Header = () => {
             >
               {theme === 'dark' ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="rounded-full">
-                  <GlobeIcon className="h-5 w-5 mr-2" />
-                  {t('translate')}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                {availableLanguages.map((lang) => (
-                  <DropdownMenuItem key={lang} onSelect={() => toggleLanguage(lang)}>
-                    {t(lang)}
-                  </DropdownMenuItem>
-                ))}
-                <DropdownMenuItem onSelect={toggleGoogleTranslate}>
-                  {t('googleTranslate')}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Popover>
+  <PopoverTrigger asChild>
+    <Button variant="outline" size="sm" className="rounded-full">
+      <GlobeIcon className="h-5 w-5 mr-2" />
+      {t('translate')}
+    </Button>
+  </PopoverTrigger>
+
+  <PopoverContent
+    className="max-h-80 overflow-auto z-49 shadow-lg p-4 rounded-md border border-gray-300 dark:border-gray-500 bg-background dark:bg-gray-900"
+    side="bottom"
+    align="start"
+  >
+    {availableLanguages.map((lang) => (
+      <div
+        key={lang}
+        className="cursor-pointer  px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+        onClick={() => setLanguage(lang)}
+      >
+        {t(lang)}
+      </div>
+    ))}
+
+    <div
+      className="cursor-pointer px-2 py-1 rounded mt-2 hover:bg-gray-200 dark:hover:bg-gray-800"
+      onClick={toggleGoogleTranslate}
+    >
+      {t('googleTranslate')}
+    </div>
+  </PopoverContent>
+</Popover>
+
             <Link href="/cart">
               <Button variant="ghost" size="sm" className="rounded-full relative">
                 <ShoppingCartIcon className="h-5 w-5" />
@@ -157,9 +188,10 @@ const Header = () => {
               </>
             )}
           </nav>
+
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
+              <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu}>
                 <MenuIcon className="h-6 w-6" />
               </Button>
             </SheetTrigger>
@@ -167,11 +199,11 @@ const Header = () => {
               <SheetHeader>
                 <SheetTitle>Menu</SheetTitle>
               </SheetHeader>
-              <nav className="flex flex-col space-y-4 mt-4">
+              <nav className="flex flex-col space-y-4 mt-4 text-foreground dark:text-gray-100">
                 <Button 
-                  variant="ghost" 
+                  variant="outline" 
                   onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')} 
-                  className="justify-start"
+                  className="justify-center"
                 >
                   {theme === 'dark' ? <SunIcon className="mr-2 h-5 w-5" /> : <MoonIcon className="mr-2 h-5 w-5" />}
                   {theme === 'dark' ? t('lightMode') : t('darkMode')}

@@ -63,3 +63,7 @@
     @apply font-heading;
   }
 }
+
+body {
+  overflow: auto !important;
+}

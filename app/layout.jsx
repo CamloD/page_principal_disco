@@ -9,6 +9,7 @@ import { SearchProvider } from './home/components/search'
 import { AuthProvider } from './Auth/auth'
 import { CartProvider } from 'app/contexts/cart_context'
 import { ErrorBoundary } from 'app/contexts/error_context'
+import { CheckoutProvider } from 'app/contexts/checkout_context'
 
 const fontHeading = Inter({
   subsets: ['latin'],
@@ -37,11 +38,13 @@ export default function RootLayout({ children }) {
           <LanguageProvider>
             <AuthProvider>
               <CartProvider>
+                <CheckoutProvider>
                 <SearchProvider>
                   <main className="pt-16"> {/* Add padding-top to account for fixed header */}
                     {children}
                   </main>
                 </SearchProvider>
+                </CheckoutProvider>
               </CartProvider>
             </AuthProvider>
           </LanguageProvider>

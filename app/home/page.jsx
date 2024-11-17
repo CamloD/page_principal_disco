@@ -268,7 +268,7 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100">
+    <div className="flex min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100 w-full">
       <Header />
       <main className="container mx-auto px-4 py-8">
         <h1 className="text-4xl md:text-5xl font-bold text-center mb-8">{t('findYourNextAdventure')}</h1>

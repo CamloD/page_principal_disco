@@ -1,19 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import { useCart } from 'app/contexts/cart_context'
-import { useLanguage } from 'app/contexts/LanguageContext'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from 'app/pages/components/Header'
+import { useAuth } from 'app/Auth/auth'
+import { useCheckout } from 'app/contexts/checkout_context'
+import { useLanguage } from 'app/contexts/LanguageContext'
+import { useCart } from 'app/contexts/cart_context'
+import { useRouter } from 'next/navigation'
 
 export default function CartPage() {
-  const { cart, removeFromCart } = useCart()
+  const { cart, removeFromCart, clearCart } = useCart()
   const { t } = useLanguage()
+  const { user } = useAuth()
+  const { startCheckout } = useCheckout() // Accedemos al contexto de Checkout
+  const router = useRouter()
 
   const total = cart.reduce((sum, item) => sum + item.price, 0)
+
+  const handleProceedToCheckout = () => {
+    if (user) {
+      startCheckout() // Iniciamos el flujo de checkout
+      router.push('/checkout') // Redirigimos al usuario a la página de checkout
+    } else {
+      router.push('/login') // Si el usuario no está logueado, lo redirigimos al login
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background dark:bg-gray-900 text-foreground dark:text-gray-100">
@@ -21,7 +35,14 @@ export default function CartPage() {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-4">{t('shoppingCart')}</h1>
         {cart.length === 0 ? (
-          <p>{t('cartEmpty')}</p>
+          <><p>{t('cartEmpty')}</p>
+            <div className="mt-4 flex flex-wrap gap-4">
+              <Link href="/">
+                <Button variant="outline">{t('continueShopping')}</Button>
+              </Link>
+           </div>
+            
+          </>
         ) : (
           <>
             {cart.map((item) => (
@@ -48,14 +69,17 @@ export default function CartPage() {
             <div className="mt-4 text-xl font-bold">
               {t('total')}: ${total.toFixed(2)}
             </div>
-            <Link href="/checkout">
-              <Button className="mt-4">{t('proceedToCheckout')}</Button>
-            </Link>
+            <div className="mt-4 flex flex-wrap gap-4">
+              <Button onClick={handleProceedToCheckout}>{t('proceedToCheckout')}</Button>
+              <Button variant="outline" onClick={clearCart}>{t('clearCart')}</Button>
+              <Link href="/">
+                <Button variant="outline">{t('continueShopping')}</Button>
+              </Link>
+              
+            </div>
           </>
         )}
-        <Link href="/">
-          <Button variant="outline" className="mt-4">{t('continueShopping')}</Button>
-        </Link>
+        
       </div>
     </div>
   )
