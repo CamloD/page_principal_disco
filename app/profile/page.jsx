@@ -130,7 +130,7 @@ export default function UserProfile() {
 
   const handleRemovePhoto = () => {
     setPhoto('/default-avatar.png')
-    updateUser({ ...user, photo: '/default-avatar.png' })
+    updateUser({ ...user, photo: 'default-avatar.png' })
   }
 
   const handleSubmit = (e) => {

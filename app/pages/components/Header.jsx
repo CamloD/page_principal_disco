@@ -156,7 +156,7 @@ const Header = () => {
                 <PopoverTrigger asChild>
                   <Button variant="ghost" className="rounded-full">
                     <Image
-                      src={user.photo || '/default-avatar.png'}
+                      src={user.photo || 'default-avatar.png'}
                       alt={user.name}
                       width={32}
                       height={32}

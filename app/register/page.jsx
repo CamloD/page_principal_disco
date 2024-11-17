@@ -48,7 +48,7 @@ export default function RegisterPage() {
 
     register({
       ...formData,
-      photo: '/default-avatar.png'
+      photo: 'default-avatar.png'
     })
     router.push('/home')
 

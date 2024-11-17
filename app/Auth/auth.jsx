@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
       const parsedUser = JSON.parse(storedUser)
       setUser({
         ...parsedUser,
-        photo: parsedUser.photo || '/default-avatar.png'
+        photo: parsedUser.photo || 'default-avatar.png'
       })
     }
     setLoading(false)
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const login = (userData) => {
     const userWithPhoto = {
       ...userData,
-      photo: userData.photo || '/default-avatar.png'
+      photo: userData.photo || 'default-avatar.png'
     }
     setUser(userWithPhoto)
     localStorage.setItem('user', JSON.stringify(userWithPhoto))
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   const register = (userData) => {
     const newUser = {
       ...userData,
-      photo: userData.photo || '/default-avatar.png'
+      photo: userData.photo || 'default-avatar.png'
     }
     const users = JSON.parse(localStorage.getItem('users') || '[]')
     users.push(newUser)
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   const updateUser = (updatedUserData) => {
     const newUserData = {
       ...updatedUserData,
-      photo: updatedUserData.photo || '/default-avatar.png'
+      photo: updatedUserData.photo || 'default-avatar.png'
     }
     setUser(newUserData)
     localStorage.setItem('user', JSON.stringify(newUserData))
