@@ -187,6 +187,96 @@
       "category": "hoteles",
       "date": "2023-10-20",
       "price": 65
+    },
+    {
+      "id": 21,
+      "title": "Resort Tropical",
+      "description": "Disfruta del lujo en un resort frente al mar",
+      "image": "https://picsum.photos/800/600?random=21",
+      "category": "hoteles",
+      "date": "2023-11-01",
+      "price": 350
+    },
+    {
+      "id": 22,
+      "title": "Coche Convertible",
+      "description": "Viaja con estilo en este coche deportivo convertible",
+      "image": "https://picsum.photos/800/600?random=22",
+      "category": "vehiculos",
+      "date": "2023-11-03",
+      "price": 120
+    },
+    {
+      "id": 23,
+      "title": "Fiesta Temática Caribeña",
+      "description": "La mejor fiesta tropical con bebidas exóticas y música",
+      "image": "https://picsum.photos/800/600?random=23",
+      "category": "discotecas",
+      "date": "2023-11-05",
+      "price": 40
+    },
+    {
+      "id": 24,
+      "title": "Cena Gourmet en Altura",
+      "description": "Una experiencia única cenando en un restaurante en el cielo",
+      "image": "https://picsum.photos/800/600?random=24",
+      "category": "restaurantes",
+      "date": "2023-11-10",
+      "price": 200
+    },
+    {
+      "id": 25,
+      "title": "Evento Gastronómico Exclusivo",
+      "description": "Conviértete en un experto con nuestros chefs en este evento culinario",
+      "image": "https://picsum.photos/800/600?random=25",
+      "category": "eventos",
+      "date": "2023-11-12",
+      "price": 150
+    },
+    {
+      "id": 26,
+      "title": "Servicio de Spa de Lujo",
+      "description": "Relájate con un tratamiento de spa exclusivo y masajes",
+      "image": "https://picsum.photos/800/600?random=26",
+      "category": "servicios",
+      "date": "2023-11-15",
+      "price": 90
+    },
+    {
+      "id": 27,
+      "title": "Villa en la Montaña",
+      "description": "Escápate a la tranquilidad de esta villa privada en la montaña",
+      "image": "https://picsum.photos/800/600?random=27",
+      "category": "hoteles",
+      "date": "2023-11-18",
+      "price": 400
+    },
+    {
+      "id": 28,
+      "title": "Coche Híbrido de Lujo",
+      "description": "El futuro de la conducción, elegancia y sostenibilidad",
+      "image": "https://picsum.photos/800/600?random=28",
+      "category": "vehiculos",
+      "date": "2023-11-20",
+      "price": 220
+    },
+    {
+      "id": 29,
+      "title": "Concierto de Música Electrónica",
+      "description": "Una noche de luces y música con los mejores DJs internacionales",
+      "image": "https://picsum.photos/800/600?random=29",
+      "category": "eventos",
+      "date": "2023-11-22",
+      "price": 50
+    },
+    {
+      "id": 30,
+      "title": "Restaurante en el Agua",
+      "description": "Disfruta de una cena espectacular sobre el agua",
+      "image": "https://picsum.photos/800/600?random=30",
+      "category": "restaurantes",
+      "date": "2023-11-25",
+      "price": 180
     }
   ]
 }
