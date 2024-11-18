@@ -277,6 +277,96 @@
       "category": "restaurantes",
       "date": "2023-11-25",
       "price": 180
+    },
+    {
+      "id": 31,
+      "title": "Hotel de Lujo en el Desierto",
+      "description": "Ubicado en medio del impresionante desierto, este hotel de lujo ofrece una experiencia única e incomparable. Disfruta de la serenidad del entorno mientras te relajas en el spa, tomas un cóctel en la terraza con vistas panorámicas o disfrutas de una experiencia culinaria en uno de nuestros exclusivos restaurantes. Las habitaciones están equipadas con lo último en tecnología y confort, asegurando una estancia perfecta.",
+      "image": "https://picsum.photos/800/600?random=31",
+      "category": "hoteles",
+      "date": "2023-11-28",
+      "price": 500
+    },
+    {
+      "id": 32,
+      "title": "Coche Deportivo Maserati",
+      "description": "Siente la adrenalina al volante de este espectacular coche deportivo Maserati, diseñado para aquellos que buscan velocidad, lujo y estilo. Con un motor de alto rendimiento, este coche garantiza una experiencia de conducción incomparable. Ideal para quienes desean recorrer la ciudad con elegancia o disfrutar de un día en la carretera con amigos, el Maserati es el automóvil perfecto para los amantes de la velocidad y el diseño.",
+      "image": "https://picsum.photos/800/600?random=32",
+      "category": "vehiculos",
+      "date": "2023-11-30",
+      "price": 300
+    },
+    {
+      "id": 33,
+      "title": "Noche de Salsa en el Club Tropic",
+      "description": "Sumérgete en una noche llena de ritmo, pasión y energía en el Club Tropic. Con un ambiente vibrante y lleno de vida, nuestro club de salsa ofrece una experiencia única para bailarines y amantes de la música latina. Desde clases de salsa para principiantes hasta presentaciones en vivo de músicos internacionales, disfrutarás de una noche inolvidable. Además, nuestra terraza ofrece una vista espectacular de la ciudad mientras disfrutas de tu cóctel favorito.",
+      "image": "https://picsum.photos/800/600?random=33",
+      "category": "discotecas",
+      "date": "2023-12-02",
+      "price": 45
+    },
+    {
+      "id": 34,
+      "title": "Restaurante de Cocina Molecular",
+      "description": "Adéntrate en el fascinante mundo de la cocina molecular en nuestro exclusivo restaurante. Con un menú innovador y experimental, cada plato es una obra de arte, combinando ciencia y gastronomía para sorprender a tus sentidos. Desde espumas y geles hasta técnicas de congelación y sifones, cada bocado ofrece una experiencia sensorial única. Perfecto para los amantes de la gastronomía que buscan probar algo realmente novedoso y fuera de lo común.",
+      "image": "https://picsum.photos/800/600?random=34",
+      "category": "restaurantes",
+      "date": "2023-12-05",
+      "price": 250
+    },
+    {
+      "id": 35,
+      "title": "Festival Internacional de Cine",
+      "description": "Disfruta de las mejores películas de cine independiente y mundial en el Festival Internacional de Cine. Durante varios días, podrás ver estrenos exclusivos, cortometrajes, documentales y participar en conferencias y talleres con cineastas reconocidos. Además, habrá proyecciones al aire libre, fiestas temáticas y encuentros entre cineastas, actores y productores, brindando una experiencia única para todos los amantes del séptimo arte.",
+      "image": "https://picsum.photos/800/600?random=35",
+      "category": "eventos",
+      "date": "2023-12-10",
+      "price": 90
+    },
+    {
+      "id": 36,
+      "title": "Servicio de Planificación de Bodas",
+      "description": "Haz de tu boda el evento perfecto con nuestro servicio de planificación de bodas. Desde la elección del lugar hasta la coordinación de la ceremonia y la recepción, nos encargamos de cada detalle para que tú solo disfrutes del día más importante de tu vida. Nuestro equipo de expertos trabajará contigo para crear una boda a medida, adaptada a tus gustos y preferencias, con proveedores seleccionados de alta calidad para que todo salga como lo soñaste.",
+      "image": "https://picsum.photos/800/600?random=36",
+      "category": "servicios",
+      "date": "2023-12-15",
+      "price": 500
+    },
+    {
+      "id": 37,
+      "title": "Hotel Boutique en la Ciudad",
+      "description": "Este elegante hotel boutique ofrece una experiencia única en el corazón de la ciudad. Con solo 20 habitaciones, cada una decorada de manera exclusiva, garantizamos una estancia íntima y personalizada. Además, nuestros huéspedes podrán disfrutar de un restaurante gourmet, un spa de lujo y acceso exclusivo a una terraza en la azotea con vistas impresionantes. Ideal para quienes buscan comodidad, estilo y atención al detalle en cada aspecto de su viaje.",
+      "image": "https://picsum.photos/800/600?random=37",
+      "category": "hoteles",
+      "date": "2023-12-18",
+      "price": 400
+    },
+    {
+      "id": 38,
+      "title": "Yate de Lujo para Alquiler",
+      "description": "Alquila nuestro yate de lujo para disfrutar de un día de navegación en alta mar o un tour exclusivo por la costa. Equipado con todas las comodidades, este yate ofrece espacios de relajación, una cocina totalmente equipada, y una tripulación profesional para asegurar que tu experiencia sea perfecta. Puedes personalizar tu itinerario, incluyendo paradas en islas privadas, cenas románticas o fiestas exclusivas en medio del océano.",
+      "image": "https://picsum.photos/800/600?random=38",
+      "category": "vehiculos",
+      "date": "2023-12-20",
+      "price": 1000
+    },
+    {
+      "id": 39,
+      "title": "Concierto de Música Clásica al Atardecer",
+      "description": "Disfruta de una tarde mágica con un concierto de música clásica en un hermoso jardín al atardecer. Con músicos de renombre internacional, este evento promete ofrecer una experiencia sonora sublime. Además de la música, podrás disfrutar de un cóctel exclusivo mientras observas el atardecer y el paisaje que rodea el lugar. Perfecto para quienes buscan una experiencia cultural única y relajante.",
+      "image": "https://picsum.photos/800/600?random=39",
+      "category": "eventos",
+      "date": "2023-12-22",
+      "price": 120
+    },
+    {
+      "id": 40,
+      "title": "Restaurante Fusión Asiática",
+      "description": "Experimenta una mezcla de sabores inexplorados en nuestro restaurante de fusión asiática. Combinamos las tradiciones culinarias de Japón, Tailandia, China y Vietnam para crear platos innovadores y únicos. Con ingredientes frescos y técnicas modernas, cada plato es una explosión de sabores que te llevará en un viaje culinario por Asia. Disfruta de un ambiente elegante y acogedor mientras te sumerges en esta experiencia gastronómica.",
+      "image": "https://picsum.photos/800/600?random=40",
+      "category": "restaurantes",
+      "date": "2023-12-25",
+      "price": 180
     }
   ]
 }
