@@ -10,6 +10,7 @@ import { AuthProvider } from './Auth/auth'
 import { CartProvider } from 'app/contexts/cart_context'
 import { ErrorBoundary } from 'app/contexts/error_context'
 import { CheckoutProvider } from 'app/contexts/checkout_context'
+import { SelectedListingProvider } from './contexts/SelectedListingContext'
 
 const fontHeading = Inter({
   subsets: ['latin'],
@@ -34,21 +35,23 @@ export default function RootLayout({ children }) {
   <html lang="es" suppressHydrationWarning>
     <body className={cn('antialiased', fontHeading.variable, fontBody.variable)}>
       <ErrorBoundary>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <LanguageProvider>
-            <AuthProvider>
-              <CartProvider>
-                <CheckoutProvider>
-                <SearchProvider>
-                  <main className="pt-16"> {/* Add padding-top to account for fixed header */}
-                    {children}
-                  </main>
-                </SearchProvider>
-                </CheckoutProvider>
-              </CartProvider>
-            </AuthProvider>
-          </LanguageProvider>
-        </ThemeProvider>
+        <SelectedListingProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <LanguageProvider>
+              <AuthProvider>
+                <CartProvider>
+                  <CheckoutProvider>
+                  <SearchProvider>
+                    <main className="pt-16"> {/* Add padding-top to account for fixed header */}
+                      {children}
+                    </main>
+                  </SearchProvider>
+                  </CheckoutProvider>
+                </CartProvider>
+              </AuthProvider>
+            </LanguageProvider>
+          </ThemeProvider>
+        </SelectedListingProvider>
       </ErrorBoundary>
     </body>
   </html>

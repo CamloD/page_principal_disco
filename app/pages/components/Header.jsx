@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 const Header = () => {
-  const { language, setLanguage, t, availableLanguages } = useLanguage()
+  const { setLanguage, t, availableLanguages, translateWithGoogle, isTranslating } = useLanguage()
   const { theme, setTheme } = useTheme()
   const { user, logout } = useAuth()
   const { cart } = useCart()
@@ -62,6 +62,18 @@ const Header = () => {
     setLanguage(lang)
   }
 
+  const handleTranslate = async () => {
+    if (window.getSelection) {
+      const selectedText = window.getSelection().toString()
+      if (selectedText) {
+        const translatedText = await translateWithGoogle(selectedText, 'es')
+        alert(`Translated text: ${translatedText}`)
+      } else {
+        alert('Please select some text to translate.')
+      }
+    }
+  }
+
   const toggleGoogleTranslate = () => {
     if (googleTranslateRef.current) {
       const translateElement = googleTranslateRef.current.querySelector('.goog-te-combo')
@@ -76,18 +88,14 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
-  // Agregar efecto al body para evitar overflow: hidden en el body
   useEffect(() => {
     if (isMenuOpen) {
-      // Cuando el menú está abierto, evitar el desplazamiento
       document.body.style.overflow = 'hidden'
     } else {
-      // Cuando el menú está cerrado, restaurar el desplazamiento
       document.body.style.overflow = 'auto'
     }
 
     return () => {
-      // Limpiar el estilo cuando el componente se desmonte o el estado cambie
       document.body.style.overflow = 'auto'
     }
   }, [isMenuOpen])
@@ -126,7 +134,7 @@ const Header = () => {
                 {availableLanguages.map((lang) => (
                   <div
                     key={lang}
-                    className="cursor-pointer  px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
+                    className="cursor-pointer px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800"
                     onClick={() => setLanguage(lang)}
                   >
                     {t(lang)}
@@ -135,9 +143,9 @@ const Header = () => {
 
                 <div
                   className="cursor-pointer px-2 py-1 rounded mt-2 hover:bg-gray-200 dark:hover:bg-gray-800"
-                  onClick={toggleGoogleTranslate}
+                  onClick={handleTranslate}
                 >
-                  {t('googleTranslate')}
+                  {isTranslating ? t('translating') : t('googleTranslate')}
                 </div>
               </PopoverContent>
             </Popover>
@@ -156,7 +164,7 @@ const Header = () => {
                 <PopoverTrigger asChild>
                   <Button variant="ghost" className="rounded-full">
                     <Image
-                      src={user.photo || 'default-avatar.png'}
+                      src={user.photo || '/default-avatar.png'}
                       alt={user.name}
                       width={32}
                       height={32}
@@ -224,8 +232,8 @@ const Header = () => {
                         {t(lang)}
                       </DropdownMenuItem>
                     ))}
-                    <DropdownMenuItem onSelect={toggleGoogleTranslate}>
-                      {t('googleTranslate')}
+                    <DropdownMenuItem onSelect={handleTranslate}>
+                      {isTranslating ? t('translating') : t('googleTranslate')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

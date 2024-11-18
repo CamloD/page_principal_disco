@@ -112,6 +112,25 @@ const translations = {
     nameError: 'Nombre inválido',
     addressError: 'Dirección inválida',
     cityCountryError: 'Ciudad/País inválidos',
+    categoryNotAvailable: 'Categoría no disponible',
+    amenities: 'Comodidades',
+    parking: 'Estacionamiento',
+    airConditioning: 'Aire acondicionado',
+    restaurant: 'Restaurante',
+    musicGenres: 'Géneros musicales',
+    cuisine: 'Cocina',
+    italian: 'Italiana',
+    mexican: 'Mexicana',
+    japanese: 'Japonesa',
+    american: 'Americana',
+    perNight: 'por noche',
+    back: 'Volver',
+    noImageAvailable: 'Imagen no disponible',
+    untitledListing: 'Listado sin título',
+    description: 'Descripción',
+    noDescriptionAvailable: 'Descripción no disponible',
+    noAmenitiesListed: 'No se han listado comodidades',
+    dateNotAvailable: 'Fecha no disponible',
   },
   en: {
     title: 'Welcome to TravelEase',
@@ -220,12 +239,32 @@ const translations = {
     nameError: 'Invalid name',
     addressError: 'Invalid address',
     cityCountryError: 'Invalid city or country',
+    categoryNotAvailable: 'Category not available',
+    amenities: 'Amenities',
+    parking: 'Parking',
+    airConditioning: 'Air conditioning',
+    restaurant: 'Restaurant',
+    musicGenres: 'Music genres',
+    cuisine: 'Cuisine',
+    italian: 'Italian',
+    mexican: 'Mexican',
+    japanese: 'Japanese',
+    american: 'American',
+    perNight: 'per night',
+    back: 'Back',
+    noImageAvailable: 'No image available',
+    untitledListing: 'Untitled listing',
+    description: 'Description',
+    noDescriptionAvailable: 'No description available',
+    noAmenitiesListed: 'No amenities listed',
+    dateNotAvailable: 'Date not available',
   },
   
 }
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState('es')
+  const [isTranslating, setIsTranslating] = useState(false)
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language') || 'es'
@@ -251,8 +290,31 @@ export const LanguageProvider = ({ children }) => {
 
   const availableLanguages = Object.keys(translations)
 
+  const translateWithGoogle = async (text, targetLang) => {
+    setIsTranslating(true)
+    try {
+      const response = await fetch(`https://translation.googleapis.com/language/translate/v2?key=YOUR_GOOGLE_TRANSLATE_API_KEY`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          q: text,
+          target: targetLang,
+        }),
+      })
+      const data = await response.json()
+      setIsTranslating(false)
+      return data.data.translations[0].translatedText
+    } catch (error) {
+      console.error('Error translating text:', error)
+      setIsTranslating(false)
+      return text
+    }
+  }
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: changeLanguage, t, availableLanguages }}>
+    <LanguageContext.Provider value={{ language, setLanguage: changeLanguage, t, availableLanguages, translateWithGoogle, isTranslating }}>
       {children}
     </LanguageContext.Provider>
   )

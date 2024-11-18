@@ -263,9 +263,7 @@ export default function ImprovedCheckoutPage() {
                   </div>
                 </div>
               </form>
-              <Button variant="outline" onClick={handleCancel} className="w-full">
-                {t('cancelOrder')}
-              </Button>
+              
             </div>
             <div className="space-y-6">
               <Card className="bg-primary/5">
@@ -293,9 +291,17 @@ export default function ImprovedCheckoutPage() {
                       <span>${total.toFixed(2)}</span>
                     </div>
                   </div>
+                  <div className='mt-4 space-y-2 items-start p-2'>
+                    <div className='flex items-start '> 
+                      <Button variant="destructive" onClick={handleCancel} className="w-full">
+                        {t('cancelOrder')}
+                      </Button>
+                      
+                    </div>
                   <Button type="submit" className="w-full mt-4" onClick={handleSubmit}>
                     {t('placeOrder')}
                   </Button>
+                  </div>
                 </CardContent>
               </Card>
             </div>
